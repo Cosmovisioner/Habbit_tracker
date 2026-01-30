@@ -13,9 +13,9 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
             min-height: 100vh;
-            color: #374151;
+            color: #e2e8f0;
             line-height: 1.6;
         }
 
@@ -38,7 +38,10 @@
         h1 {
             font-size: 1.8rem;
             font-weight: 600;
-            color: #1f2937;
+            background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .user-tabs {
@@ -53,43 +56,50 @@
             cursor: pointer;
             font-size: 0.9rem;
             font-weight: 500;
-            transition: all 0.2s ease;
-            background: #e5e7eb;
-            color: #6b7280;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .user-tab:hover {
-            background: #d1d5db;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(244, 114, 182, 0.3);
         }
 
         .user-tab.active {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
             color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
         }
 
         .user-tab[data-user="B"].active {
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
         }
 
         /* Global Progress Bar */
         .global-progress {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .global-progress h3 {
             font-size: 0.9rem;
-            color: #6b7280;
+            color: #94a3b8;
             margin-bottom: 12px;
             font-weight: 500;
         }
 
         .progress-bar {
             height: 12px;
-            background: #e5e7eb;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 6px;
             overflow: hidden;
             position: relative;
@@ -99,12 +109,13 @@
             height: 100%;
             border-radius: 6px;
             transition: width 0.5s ease;
-            background: linear-gradient(90deg, #4ade80 0%, #22c55e 50%, #16a34a 100%);
+            background: linear-gradient(90deg, #ec4899 0%, #f472b6 50%, #c084fc 100%);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
         }
 
         .progress-text {
             font-size: 0.85rem;
-            color: #9ca3af;
+            color: #94a3b8;
             margin-top: 8px;
             text-align: right;
         }
@@ -124,10 +135,11 @@
 
         /* Calendar */
         .calendar-section {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .calendar-header {
@@ -140,6 +152,7 @@
         .calendar-header h2 {
             font-size: 1.1rem;
             font-weight: 600;
+            color: #f1f5f9;
         }
 
         .calendar-nav {
@@ -152,14 +165,17 @@
             height: 32px;
             border: none;
             border-radius: 8px;
-            background: #f3f4f6;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
             cursor: pointer;
             font-size: 1rem;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .calendar-nav button:hover {
-            background: #e5e7eb;
+            background: rgba(244, 114, 182, 0.2);
+            border-color: rgba(244, 114, 182, 0.3);
         }
 
         .calendar-grid {
@@ -171,7 +187,7 @@
         .calendar-weekday {
             text-align: center;
             font-size: 0.75rem;
-            color: #9ca3af;
+            color: #64748b;
             padding: 8px 0;
             font-weight: 500;
         }
@@ -186,10 +202,11 @@
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
+            color: #cbd5e1;
         }
 
         .calendar-day:hover {
-            background: #f3f4f6;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .calendar-day.empty {
@@ -202,28 +219,31 @@
 
         .calendar-day.today {
             font-weight: 600;
-            border: 2px solid #4ade80;
+            border: 2px solid #f472b6;
+            color: #f472b6;
         }
 
         .calendar-day.selected {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
         }
 
         .calendar-day.has-activity {
-            background: rgba(74, 222, 128, 0.2);
+            background: rgba(244, 114, 182, 0.2);
         }
 
         .calendar-day.has-activity.selected {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
         }
 
         /* Habits Section */
         .habits-section {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .habits-header {
@@ -236,11 +256,12 @@
         .habits-header h2 {
             font-size: 1.1rem;
             font-weight: 600;
+            color: #f1f5f9;
         }
 
         .selected-date {
             font-size: 0.85rem;
-            color: #6b7280;
+            color: #94a3b8;
         }
 
         .habits-list {
@@ -255,19 +276,21 @@
             align-items: center;
             gap: 12px;
             padding: 12px;
-            background: #f9fafb;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             transition: all 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .habit-item:hover {
-            background: #f3f4f6;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(244, 114, 182, 0.2);
         }
 
         .habit-checkbox {
             width: 24px;
             height: 24px;
-            border: 2px solid #d1d5db;
+            border: 2px solid #475569;
             border-radius: 6px;
             cursor: pointer;
             display: flex;
@@ -278,9 +301,10 @@
         }
 
         .habit-checkbox.checked {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            border-color: #22c55e;
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            border-color: #f472b6;
             color: white;
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
         }
 
         .habit-checkbox svg {
@@ -305,6 +329,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            color: #e2e8f0;
         }
 
         .habit-owner {
@@ -315,18 +340,18 @@
         }
 
         .habit-owner.owner-A {
-            background: rgba(74, 222, 128, 0.2);
-            color: #16a34a;
+            background: rgba(236, 72, 153, 0.2);
+            color: #f472b6;
         }
 
         .habit-owner.owner-B {
-            background: rgba(96, 165, 250, 0.2);
-            color: #2563eb;
+            background: rgba(168, 85, 247, 0.2);
+            color: #c084fc;
         }
 
         .habit-owner.owner-shared {
-            background: rgba(167, 139, 250, 0.2);
-            color: #7c3aed;
+            background: rgba(129, 140, 248, 0.2);
+            color: #a5b4fc;
         }
 
         .habit-progress {
@@ -335,7 +360,7 @@
 
         .habit-progress-bar {
             height: 6px;
-            background: #e5e7eb;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
             overflow: hidden;
         }
@@ -344,12 +369,12 @@
             height: 100%;
             border-radius: 3px;
             transition: width 0.3s ease;
-            background: linear-gradient(90deg, #4ade80 0%, #22c55e 100%);
+            background: linear-gradient(90deg, #ec4899 0%, #f472b6 100%);
         }
 
         .habit-progress-text {
             font-size: 0.75rem;
-            color: #9ca3af;
+            color: #64748b;
             margin-top: 4px;
         }
 
@@ -357,39 +382,43 @@
         .numeric-input {
             width: 60px;
             padding: 6px 8px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid #475569;
             border-radius: 8px;
             font-size: 0.9rem;
             text-align: center;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
         }
 
         .numeric-input:focus {
             outline: none;
-            border-color: #4ade80;
+            border-color: #f472b6;
+            box-shadow: 0 0 10px rgba(244, 114, 182, 0.3);
         }
 
         .numeric-goal {
             font-size: 0.8rem;
-            color: #9ca3af;
+            color: #64748b;
         }
 
         /* Add Habit Form */
         .add-habit-btn {
             width: 100%;
             padding: 12px;
-            border: 2px dashed #d1d5db;
+            border: 2px dashed #475569;
             border-radius: 12px;
             background: transparent;
-            color: #6b7280;
+            color: #94a3b8;
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .add-habit-btn:hover {
-            border-color: #4ade80;
-            color: #22c55e;
+            border-color: #f472b6;
+            color: #f472b6;
+            background: rgba(244, 114, 182, 0.1);
         }
 
         .add-habit-form {
@@ -397,9 +426,10 @@
             flex-direction: column;
             gap: 12px;
             padding: 16px;
-            background: #f9fafb;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 12px;
             margin-top: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .add-habit-form.active {
@@ -420,7 +450,7 @@
         .form-group label {
             display: block;
             font-size: 0.8rem;
-            color: #6b7280;
+            color: #94a3b8;
             margin-bottom: 4px;
         }
 
@@ -428,16 +458,24 @@
         .form-group select {
             width: 100%;
             padding: 8px 12px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid #475569;
             border-radius: 8px;
             font-size: 0.9rem;
-            transition: border-color 0.2s;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
         }
 
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #4ade80;
+            border-color: #f472b6;
+            box-shadow: 0 0 10px rgba(244, 114, 182, 0.3);
+        }
+
+        .form-group select option {
+            background: #1a1a2e;
+            color: #e2e8f0;
         }
 
         .form-actions {
@@ -456,22 +494,23 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
             color: white;
         }
 
         .btn-primary:hover {
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
         }
 
         .btn-secondary {
-            background: #e5e7eb;
-            color: #6b7280;
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .btn-secondary:hover {
-            background: #d1d5db;
+            background: rgba(255, 255, 255, 0.15);
         }
 
         /* User Progress */
@@ -489,15 +528,16 @@
         }
 
         .user-progress-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .user-progress-card h3 {
             font-size: 0.9rem;
-            color: #6b7280;
+            color: #94a3b8;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
@@ -511,18 +551,20 @@
         }
 
         .user-progress-card h3 .dot.user-a {
-            background: #4ade80;
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
         }
 
         .user-progress-card h3 .dot.user-b {
-            background: #60a5fa;
+            background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
-            color: #9ca3af;
+            color: #64748b;
         }
 
         .empty-state p {
@@ -534,8 +576,18 @@
             text-align: center;
             padding: 16px;
             font-size: 0.9rem;
-            color: #6b7280;
+            color: #64748b;
             font-style: italic;
+        }
+
+        /* Glow effects */
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(236, 72, 153, 0.5); }
+        }
+
+        .global-progress .progress-fill {
+            animation: glow 3s ease-in-out infinite;
         }
     </style>
 </head>
@@ -545,8 +597,8 @@
             <h1>Habit Tracker</h1>
             <div class="user-tabs">
                 <button class="user-tab active" data-user="all">Все</button>
-                <button class="user-tab" data-user="A">User A</button>
-                <button class="user-tab" data-user="B">User B</button>
+                <button class="user-tab" data-user="A">Димочка 🦊</button>
+                <button class="user-tab" data-user="B">Дашенька 🦋</button>
             </div>
         </header>
 
@@ -613,8 +665,8 @@
                             <label>Владелец</label>
                             <select id="habitOwner">
                                 <option value="shared">Общая</option>
-                                <option value="A">User A</option>
-                                <option value="B">User B</option>
+                                <option value="A">Димочка 🦊</option>
+                                <option value="B">Дашенька 🦋</option>
                             </select>
                         </div>
                     </div>
@@ -628,16 +680,16 @@
 
         <div class="user-progress">
             <div class="user-progress-card">
-                <h3><span class="dot user-a"></span>Прогресс User A</h3>
+                <h3><span class="dot user-a"></span>Димочка 🦊</h3>
                 <div class="progress-bar">
                     <div class="progress-fill" id="userAProgress" style="width: 0%"></div>
                 </div>
                 <div class="progress-text" id="userAProgressText">0%</div>
             </div>
             <div class="user-progress-card">
-                <h3><span class="dot user-b"></span>Прогресс User B</h3>
+                <h3><span class="dot user-b"></span>Дашенька 🦋</h3>
                 <div class="progress-bar">
-                    <div class="progress-fill" id="userBProgress" style="width: 0%; background: linear-gradient(90deg, #60a5fa 0%, #3b82f6 100%);"></div>
+                    <div class="progress-fill" id="userBProgress" style="width: 0%; background: linear-gradient(90deg, #a855f7 0%, #c084fc 100%);"></div>
                 </div>
                 <div class="progress-text" id="userBProgressText">0%</div>
             </div>
@@ -802,7 +854,8 @@
                 const value = dayEntries[habit.id];
                 const progress = calculateHabitProgress(habit);
                 const ownerClass = `owner-${habit.owner}`;
-                const ownerLabel = habit.owner === 'shared' ? 'Общая' : `User ${habit.owner}`;
+                const ownerNames = { A: 'Димочка 🦊', B: 'Дашенька 🦋', shared: 'Общая 💕' };
+                const ownerLabel = ownerNames[habit.owner] || habit.owner;
                 
                 if (habit.type === 'binary') {
                     const checked = value === true;
