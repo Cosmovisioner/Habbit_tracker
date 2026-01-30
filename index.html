@@ -431,6 +431,13 @@
             transition: all 0.2s;
             background: rgba(255, 255, 255, 0.05);
             color: #e2e8f0;
+            -moz-appearance: textfield;
+        }
+
+        .numeric-input::-webkit-outer-spin-button,
+        .numeric-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
 
         .numeric-input:focus {
@@ -440,24 +447,17 @@
         }
 
         .numeric-input.completed {
-            border-color: #f472b6;
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(244, 114, 182, 0.2) 100%);
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+            border-color: #a855f7;
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(192, 132, 252, 0.2) 100%);
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+            color: #c084fc;
         }
 
-        .numeric-check {
-            position: absolute;
-            right: -24px;
-            color: #f472b6;
-            font-size: 1rem;
-            opacity: 0;
-            transform: scale(0);
-            transition: all 0.3s ease;
-        }
-
-        .numeric-check.show {
-            opacity: 1;
-            transform: scale(1);
+        .numeric-input.incomplete {
+            border-color: #f87171;
+            background: linear-gradient(135deg, rgba(248, 113, 113, 0.15) 0%, rgba(239, 68, 68, 0.15) 100%);
+            box-shadow: 0 0 10px rgba(248, 113, 113, 0.3);
+            color: #fca5a5;
         }
 
         .numeric-goal {
@@ -1228,15 +1228,15 @@
                     const numValue = typeof value === 'number' ? value : 0;
                     const goalType = habit.goalType || 'daily';
                     const dailyGoal = habit.goal || 0;
-                    const isDayCompleted = goalType === 'daily' && dailyGoal > 0 && numValue >= dailyGoal;
+                    const hasDailyGoal = goalType === 'daily' && dailyGoal > 0;
+                    const isDayCompleted = hasDailyGoal && numValue >= dailyGoal;
+                    const isDayIncomplete = hasDailyGoal && numValue > 0 && numValue < dailyGoal;
+                    const inputClass = isDayCompleted ? 'completed' : (isDayIncomplete ? 'incomplete' : '');
                     const goalLabel = habit.goal ? (goalType === 'daily' ? `/ ${habit.goal} в день` : `/ ${habit.goal}`) : '';
                     return `
                         <div class="habit-item" data-habit-id="${habit.id}">
-                            <div class="numeric-input-wrapper">
-                                <input type="number" class="numeric-input ${isDayCompleted ? 'completed' : ''}" value="${numValue}" min="0" 
-                                       onchange="updateNumericHabit('${habit.id}', this.value)">
-                                <span class="numeric-check ${isDayCompleted ? 'show' : ''}">✓</span>
-                            </div>
+                            <input type="number" class="numeric-input ${inputClass}" value="${numValue}" min="0" 
+                                   onchange="updateNumericHabit('${habit.id}', this.value)">
                             <div class="habit-info" onclick="showHabitDetail('${habit.id}')" style="cursor: pointer;">
                                 <div class="habit-name">
                                     ${habit.name}
