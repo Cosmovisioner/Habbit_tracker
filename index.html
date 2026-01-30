@@ -465,6 +465,34 @@
             color: #64748b;
         }
 
+        /* Target Progress Badge */
+        .target-progress {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 8px;
+            background: rgba(244, 114, 182, 0.15);
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: #f472b6;
+            margin-left: 8px;
+        }
+
+        .target-progress-bar {
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .target-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ec4899 0%, #f472b6 100%);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
         /* Habit Detail Modal */
         .habit-detail-overlay {
             position: fixed;
@@ -939,6 +967,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Общая цель (опционально)</label>
+                            <input type="number" id="habitTarget" placeholder="100 медитаций за год" min="1">
+                        </div>
+                    </div>
                     <div class="form-actions">
                         <button class="btn btn-secondary" id="cancelHabit">Отмена</button>
                         <button class="btn btn-primary" id="saveHabit">Сохранить</button>
@@ -1158,6 +1192,15 @@
 
                 if (habit.type === 'binary') {
                     const checked = value === true;
+                    const totalCount = countTotalCompletions(habit);
+                    const targetHtml = habit.target ? `
+                        <div class="target-progress">
+                            <span>${totalCount}/${habit.target}</span>
+                            <div class="target-progress-bar">
+                                <div class="target-progress-fill" style="width: ${Math.min((totalCount / habit.target) * 100, 100)}%"></div>
+                            </div>
+                        </div>
+                    ` : '';
                     return `
                         <div class="habit-item" data-habit-id="${habit.id}">
                             <div class="habit-checkbox ${checked ? 'checked' : ''}" onclick="toggleBinaryHabit('${habit.id}')">
@@ -1169,6 +1212,7 @@
                                 <div class="habit-name">
                                     ${habit.name}
                                     <span class="habit-owner ${ownerClass}">${ownerLabel}</span>
+                                    ${targetHtml}
                                 </div>
                                 <div class="habit-progress">
                                     <div class="habit-progress-bar">
@@ -1220,6 +1264,19 @@
                 case 'all': return 'всё время';
                 default: return period;
             }
+        }
+
+        function countTotalCompletions(habit) {
+            let count = 0;
+            Object.keys(data.entries).forEach(dateStr => {
+                const entry = data.entries[dateStr][habit.id];
+                if (habit.type === 'binary') {
+                    if (entry === true) count++;
+                } else {
+                    if (typeof entry === 'number') count += entry;
+                }
+            });
+            return count;
         }
 
         function toggleBinaryHabit(habitId) {
@@ -1358,7 +1415,26 @@
         
         function renderHabitStats(stats, habit) {
             const container = document.getElementById('habitDetailStats');
+            const totalCount = countTotalCompletions(habit);
+            
+            let targetHtml = '';
+            if (habit.target) {
+                const targetProgress = Math.min((totalCount / habit.target) * 100, 100);
+                targetHtml = `
+                    <div class="habit-stat" style="grid-column: span 3; margin-bottom: 8px;">
+                        <div class="habit-stat-value">${totalCount} / ${habit.target}</div>
+                        <div class="habit-stat-label">общая цель</div>
+                        <div style="margin-top: 8px;">
+                            <div class="progress-bar" style="height: 8px;">
+                                <div class="progress-fill" style="width: ${targetProgress}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
             container.innerHTML = `
+                ${targetHtml}
                 <div class="habit-stat">
                     <div class="habit-stat-value">${stats.completedDays}</div>
                     <div class="habit-stat-label">выполнено дней</div>
@@ -1586,6 +1662,7 @@
             const owner = document.getElementById('habitOwner').value;
             const goal = parseInt(document.getElementById('habitGoal').value) || null;
             const goalType = document.getElementById('habitGoalType').value;
+            const target = parseInt(document.getElementById('habitTarget').value) || null;
             
             if (!name) {
                 alert('Введите название привычки');
@@ -1603,7 +1680,8 @@
                         period,
                         owner,
                         goal: type === 'numeric' ? goal : null,
-                        goalType: type === 'numeric' ? goalType : null
+                        goalType: type === 'numeric' ? goalType : null,
+                        target
                     };
                 }
             } else {
@@ -1615,7 +1693,8 @@
                     period,
                     owner,
                     goal: type === 'numeric' ? goal : null,
-                    goalType: type === 'numeric' ? goalType : null
+                    goalType: type === 'numeric' ? goalType : null,
+                    target
                 };
                 data.habits.push(habit);
             }
@@ -1642,6 +1721,7 @@
             document.getElementById('habitOwner').value = habit.owner;
             document.getElementById('habitGoal').value = habit.goal || '';
             document.getElementById('habitGoalType').value = habit.goalType || 'daily';
+            document.getElementById('habitTarget').value = habit.target || '';
             
             const isNumeric = habit.type === 'numeric';
             goalGroup.style.display = isNumeric ? 'block' : 'none';
@@ -1677,6 +1757,7 @@
             document.getElementById('habitOwner').value = 'shared';
             document.getElementById('habitGoal').value = '';
             document.getElementById('habitGoalType').value = 'daily';
+            document.getElementById('habitTarget').value = '';
             goalGroup.style.display = 'none';
             goalTypeGroup.style.display = 'none';
         }
