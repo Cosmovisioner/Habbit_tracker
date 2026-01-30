@@ -447,10 +447,10 @@
         }
 
         .numeric-input.completed {
-            border-color: #a855f7;
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(192, 132, 252, 0.2) 100%);
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
-            color: #c084fc;
+            border-color: #f472b6;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(244, 114, 182, 0.2) 100%);
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
+            color: #f9a8d4;
         }
 
         .numeric-input.incomplete {
@@ -942,11 +942,19 @@
                             <input type="number" id="habitGoal" placeholder="10" min="1">
                         </div>
                         <div class="form-group" id="goalTypeGroup" style="display: none;">
-                            <label>Тип цели</label>
+                            <label>Период цели</label>
                             <select id="habitGoalType">
                                 <option value="daily">В день</option>
-                                <option value="total">За период</option>
+                                <option value="week">В неделю</option>
+                                <option value="month">В месяц</option>
+                                <option value="quarter">В квартал</option>
+                                <option value="year">В год</option>
+                                <option value="custom">Свой период</option>
                             </select>
+                        </div>
+                        <div class="form-group" id="customPeriodGroup" style="display: none;">
+                            <label>Дней в периоде</label>
+                            <input type="number" id="habitCustomPeriod" placeholder="50" min="1">
                         </div>
                     </div>
                     <div class="form-row">
@@ -1226,13 +1234,10 @@
                     `;
                 } else {
                     const numValue = typeof value === 'number' ? value : 0;
-                    const goalType = habit.goalType || 'daily';
-                    const dailyGoal = habit.goal || 0;
-                    const hasDailyGoal = goalType === 'daily' && dailyGoal > 0;
-                    const isDayCompleted = hasDailyGoal && numValue >= dailyGoal;
-                    const isDayIncomplete = hasDailyGoal && numValue > 0 && numValue < dailyGoal;
-                    const inputClass = isDayCompleted ? 'completed' : (isDayIncomplete ? 'incomplete' : '');
-                    const goalLabel = habit.goal ? (goalType === 'daily' ? `/ ${habit.goal} в день` : `/ ${habit.goal}`) : '';
+                    const goalStatus = checkNumericGoalCompleted(habit, numValue);
+                    const inputClass = goalStatus.completed ? 'completed' : (goalStatus.incomplete ? 'incomplete' : '');
+                    const goalPeriodLabel = getGoalPeriodLabel(habit.goalType, habit.customPeriod);
+                    const goalLabel = habit.goal ? `/ ${habit.goal} ${goalPeriodLabel}` : '';
                     return `
                         <div class="habit-item" data-habit-id="${habit.id}">
                             <input type="number" class="numeric-input ${inputClass}" value="${numValue}" min="0" 
@@ -1263,6 +1268,61 @@
                 case 'month': return 'месяц';
                 case 'all': return 'всё время';
                 default: return period;
+            }
+        }
+
+        function getGoalPeriodLabel(goalType, customPeriod) {
+            switch (goalType) {
+                case 'daily': return 'в день';
+                case 'week': return 'в неделю';
+                case 'month': return 'в месяц';
+                case 'quarter': return 'в квартал';
+                case 'year': return 'в год';
+                case 'custom': return customPeriod ? `за ${customPeriod} дн.` : '';
+                default: return '';
+            }
+        }
+
+        function getGoalPeriodDays(goalType, customPeriod) {
+            switch (goalType) {
+                case 'daily': return 1;
+                case 'week': return 7;
+                case 'month': return 30;
+                case 'quarter': return 90;
+                case 'year': return 365;
+                case 'custom': return customPeriod || 1;
+                default: return 1;
+            }
+        }
+
+        function checkNumericGoalCompleted(habit, numValue) {
+            const goalType = habit.goalType || 'daily';
+            const goal = habit.goal || 0;
+            if (!goal) return { completed: false, incomplete: false };
+            
+            const periodDays = getGoalPeriodDays(goalType, habit.customPeriod);
+            
+            if (periodDays === 1) {
+                // Daily goal - check today's value
+                return {
+                    completed: numValue >= goal,
+                    incomplete: numValue > 0 && numValue < goal
+                };
+            } else {
+                // Period goal - check sum over the period
+                const now = new Date();
+                let sum = 0;
+                for (let i = 0; i < periodDays; i++) {
+                    const date = new Date(now);
+                    date.setDate(now.getDate() - i);
+                    const dateStr = formatDate(date);
+                    const entry = data.entries[dateStr]?.[habit.id];
+                    if (typeof entry === 'number') sum += entry;
+                }
+                return {
+                    completed: sum >= goal,
+                    incomplete: sum > 0 && sum < goal
+                };
             }
         }
 
@@ -1649,10 +1709,20 @@
             clearForm();
         });
 
+        const customPeriodGroup = document.getElementById('customPeriodGroup');
+        const goalTypeSelect = document.getElementById('habitGoalType');
+
         habitTypeSelect.addEventListener('change', () => {
             const isNumeric = habitTypeSelect.value === 'numeric';
             goalGroup.style.display = isNumeric ? 'block' : 'none';
             goalTypeGroup.style.display = isNumeric ? 'block' : 'none';
+            if (!isNumeric) {
+                customPeriodGroup.style.display = 'none';
+            }
+        });
+
+        goalTypeSelect.addEventListener('change', () => {
+            customPeriodGroup.style.display = goalTypeSelect.value === 'custom' ? 'block' : 'none';
         });
 
         saveHabitBtn.addEventListener('click', () => {
@@ -1662,6 +1732,7 @@
             const owner = document.getElementById('habitOwner').value;
             const goal = parseInt(document.getElementById('habitGoal').value) || null;
             const goalType = document.getElementById('habitGoalType').value;
+            const customPeriod = parseInt(document.getElementById('habitCustomPeriod').value) || null;
             const target = parseInt(document.getElementById('habitTarget').value) || null;
             
             if (!name) {
@@ -1681,6 +1752,7 @@
                         owner,
                         goal: type === 'numeric' ? goal : null,
                         goalType: type === 'numeric' ? goalType : null,
+                        customPeriod: type === 'numeric' && goalType === 'custom' ? customPeriod : null,
                         target
                     };
                 }
@@ -1694,6 +1766,7 @@
                     owner,
                     goal: type === 'numeric' ? goal : null,
                     goalType: type === 'numeric' ? goalType : null,
+                    customPeriod: type === 'numeric' && goalType === 'custom' ? customPeriod : null,
                     target
                 };
                 data.habits.push(habit);
@@ -1721,11 +1794,13 @@
             document.getElementById('habitOwner').value = habit.owner;
             document.getElementById('habitGoal').value = habit.goal || '';
             document.getElementById('habitGoalType').value = habit.goalType || 'daily';
+            document.getElementById('habitCustomPeriod').value = habit.customPeriod || '';
             document.getElementById('habitTarget').value = habit.target || '';
             
             const isNumeric = habit.type === 'numeric';
             goalGroup.style.display = isNumeric ? 'block' : 'none';
             goalTypeGroup.style.display = isNumeric ? 'block' : 'none';
+            customPeriodGroup.style.display = isNumeric && habit.goalType === 'custom' ? 'block' : 'none';
             
             addHabitForm.classList.add('active');
             addHabitBtn.style.display = 'none';
@@ -1757,9 +1832,11 @@
             document.getElementById('habitOwner').value = 'shared';
             document.getElementById('habitGoal').value = '';
             document.getElementById('habitGoalType').value = 'daily';
+            document.getElementById('habitCustomPeriod').value = '';
             document.getElementById('habitTarget').value = '';
             goalGroup.style.display = 'none';
             goalTypeGroup.style.display = 'none';
+            customPeriodGroup.style.display = 'none';
         }
 
         // ============ USER FILTER ============
