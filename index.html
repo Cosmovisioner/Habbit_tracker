@@ -569,10 +569,34 @@
             margin-bottom: 16px;
         }
 
-        .habit-detail-calendar h4 {
+        .habit-detail-calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .habit-detail-calendar-header h4 {
             font-size: 0.9rem;
             color: #94a3b8;
-            margin-bottom: 12px;
+            margin: 0;
+        }
+
+        .habit-detail-nav {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .habit-detail-nav:hover {
+            background: rgba(244, 114, 182, 0.2);
+            color: #f472b6;
         }
 
         .habit-calendar-grid {
@@ -954,7 +978,11 @@
             </div>
             <div class="habit-detail-stats" id="habitDetailStats"></div>
             <div class="habit-detail-calendar">
-                <h4 id="habitDetailCalendarTitle">Январь 2026</h4>
+                <div class="habit-detail-calendar-header">
+                    <button class="habit-detail-nav" id="habitDetailPrevMonth">←</button>
+                    <h4 id="habitDetailCalendarTitle">Январь 2026</h4>
+                    <button class="habit-detail-nav" id="habitDetailNextMonth">→</button>
+                </div>
                 <div class="habit-calendar-grid" id="habitDetailCalendarGrid"></div>
                 <div class="habit-detail-legend">
                     <div class="legend-item"><div class="legend-dot completed"></div> Выполнено</div>
@@ -1409,6 +1437,27 @@
         document.getElementById('habitDetailOverlay').addEventListener('click', (e) => {
             if (e.target.id === 'habitDetailOverlay') {
                 document.getElementById('habitDetailOverlay').classList.remove('active');
+            }
+        });
+        
+        // Detail calendar navigation
+        document.getElementById('habitDetailPrevMonth').addEventListener('click', () => {
+            const overlay = document.getElementById('habitDetailOverlay');
+            const habitId = overlay.dataset.habitId;
+            const habit = data.habits.find(h => h.id === habitId);
+            if (habit) {
+                detailMonth.setMonth(detailMonth.getMonth() - 1);
+                renderHabitDetailCalendar(habit);
+            }
+        });
+        
+        document.getElementById('habitDetailNextMonth').addEventListener('click', () => {
+            const overlay = document.getElementById('habitDetailOverlay');
+            const habitId = overlay.dataset.habitId;
+            const habit = data.habits.find(h => h.id === habitId);
+            if (habit) {
+                detailMonth.setMonth(detailMonth.getMonth() + 1);
+                renderHabitDetailCalendar(habit);
             }
         });
 
