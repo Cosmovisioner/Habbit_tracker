@@ -3,6 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f0f1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Habit Tracker">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.svg">
+    <link rel="icon" type="image/svg+xml" href="icon-192.svg">
     <title>Habit Tracker</title>
     <style>
         * {
@@ -879,6 +886,661 @@
         .global-progress .progress-fill {
             animation: glow 3s ease-in-out infinite;
         }
+
+        /* Header Actions */
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .icon-btn:hover {
+            background: rgba(244, 114, 182, 0.2);
+            color: #f472b6;
+            border-color: rgba(244, 114, 182, 0.3);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: relative;
+        }
+
+        /* Settings Panel */
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .settings-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .settings-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .settings-overlay.active .settings-modal {
+            transform: scale(1);
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .settings-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .settings-section {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .settings-section h4 {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .settings-row label {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .settings-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(24px);
+        }
+
+        /* Pause Mode Banner */
+        .pause-banner {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pause-banner.active {
+            display: flex;
+        }
+
+        .pause-banner-icon {
+            font-size: 1.5rem;
+        }
+
+        .pause-banner-text {
+            flex: 1;
+        }
+
+        .pause-banner-text h4 {
+            color: #fbbf24;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+        }
+
+        .pause-banner-text p {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+
+        .pause-banner-end {
+            padding: 6px 12px;
+            background: rgba(251, 191, 36, 0.2);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 8px;
+            color: #fbbf24;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pause-banner-end:hover {
+            background: rgba(251, 191, 36, 0.3);
+        }
+
+        /* Categories */
+        .category-badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(129, 140, 248, 0.2);
+            color: #a5b4fc;
+            margin-left: 6px;
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .category-chip {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .category-chip:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .category-chip.active {
+            background: rgba(129, 140, 248, 0.2);
+            color: #a5b4fc;
+            border-color: rgba(129, 140, 248, 0.3);
+        }
+
+        /* Drag and Drop */
+        .habit-item.dragging {
+            opacity: 0.5;
+            transform: scale(1.02);
+        }
+
+        .habit-item.drag-over {
+            border-color: #f472b6;
+            background: rgba(244, 114, 182, 0.1);
+        }
+
+        .habit-drag-handle {
+            cursor: grab;
+            color: #475569;
+            padding: 4px;
+            margin-right: 8px;
+            font-size: 1rem;
+            transition: color 0.2s;
+        }
+
+        .habit-drag-handle:hover {
+            color: #94a3b8;
+        }
+
+        .habit-drag-handle:active {
+            cursor: grabbing;
+        }
+
+        /* Analytics Modal */
+        .analytics-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .analytics-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .analytics-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 700px;
+            width: 95%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .analytics-overlay.active .analytics-modal {
+            transform: scale(1);
+        }
+
+        .analytics-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .analytics-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .analytics-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .analytics-tab {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .analytics-tab:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .analytics-tab.active {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            color: white;
+        }
+
+        .analytics-content {
+            min-height: 300px;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .chart-title {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 16px;
+        }
+
+        /* Bar Chart */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 150px;
+            gap: 8px;
+            padding-top: 20px;
+        }
+
+        .bar-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 100%;
+            max-width: 40px;
+            background: linear-gradient(180deg, #ec4899 0%, #f472b6 100%);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease;
+            min-height: 4px;
+        }
+
+        .bar-label {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .bar-value {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            position: absolute;
+            top: -20px;
+        }
+
+        /* Heatmap */
+        .heatmap {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.2s;
+        }
+
+        .heatmap-cell.level-1 { background: rgba(236, 72, 153, 0.2); }
+        .heatmap-cell.level-2 { background: rgba(236, 72, 153, 0.4); }
+        .heatmap-cell.level-3 { background: rgba(236, 72, 153, 0.6); }
+        .heatmap-cell.level-4 { background: rgba(236, 72, 153, 0.8); }
+        .heatmap-cell.level-5 { background: #ec4899; }
+
+        .heatmap-legend {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+            margin-top: 12px;
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .heatmap-legend-cell {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-card-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        /* Light Theme */
+        body.light-theme {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+            color: #1e293b;
+        }
+
+        body.light-theme h1 {
+            background: linear-gradient(135deg, #db2777 0%, #9333ea 50%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.light-theme .user-tab {
+            background: rgba(0, 0, 0, 0.05);
+            color: #64748b;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .user-tab:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .user-tab.active {
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            color: white;
+        }
+
+        body.light-theme .global-progress,
+        body.light-theme .calendar-section,
+        body.light-theme .habits-section,
+        body.light-theme .user-progress-card {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .global-progress h3,
+        body.light-theme .progress-text {
+            color: #64748b;
+        }
+
+        body.light-theme .calendar-header h2,
+        body.light-theme .habits-header h2 {
+            color: #1e293b;
+        }
+
+        body.light-theme .calendar-nav button {
+            background: rgba(0, 0, 0, 0.05);
+            color: #1e293b;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .calendar-nav button:hover {
+            background: rgba(236, 72, 153, 0.1);
+        }
+
+        body.light-theme .calendar-day {
+            color: #475569;
+        }
+
+        body.light-theme .calendar-day:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .calendar-day.has-activity {
+            background: rgba(236, 72, 153, 0.15);
+        }
+
+        body.light-theme .habit-item {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .habit-item:hover {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: rgba(236, 72, 153, 0.2);
+        }
+
+        body.light-theme .habit-name {
+            color: #1e293b;
+        }
+
+        body.light-theme .habit-checkbox {
+            border-color: #94a3b8;
+        }
+
+        body.light-theme .numeric-input {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: #94a3b8;
+            color: #1e293b;
+        }
+
+        body.light-theme .add-habit-btn {
+            border-color: #94a3b8;
+            color: #64748b;
+        }
+
+        body.light-theme .add-habit-btn:hover {
+            border-color: #ec4899;
+            color: #ec4899;
+            background: rgba(236, 72, 153, 0.1);
+        }
+
+        body.light-theme .add-habit-form {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .form-group input,
+        body.light-theme .form-group select {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: #94a3b8;
+            color: #1e293b;
+        }
+
+        body.light-theme .form-group select option {
+            background: white;
+            color: #1e293b;
+        }
+
+        body.light-theme .motivation {
+            color: #64748b;
+        }
+
+        body.light-theme .icon-btn {
+            background: rgba(0, 0, 0, 0.05);
+            color: #64748b;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .icon-btn:hover {
+            background: rgba(236, 72, 153, 0.1);
+            color: #ec4899;
+        }
+
+        body.light-theme .settings-modal,
+        body.light-theme .analytics-modal,
+        body.light-theme .habit-detail-modal {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        body.light-theme .settings-section,
+        body.light-theme .chart-container,
+        body.light-theme .stat-card,
+        body.light-theme .habit-stat {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        body.light-theme .settings-title,
+        body.light-theme .analytics-title,
+        body.light-theme .habit-detail-title {
+            color: #1e293b;
+        }
+
+        body.light-theme .settings-row label {
+            color: #1e293b;
+        }
+
+        body.light-theme .toggle-switch {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .analytics-tab {
+            background: rgba(0, 0, 0, 0.05);
+            color: #64748b;
+        }
+
+        body.light-theme .analytics-tab:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .pause-banner {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.15) 100%);
+        }
+
+        body.light-theme .habit-calendar-day {
+            background: rgba(0, 0, 0, 0.03);
+            color: #64748b;
+        }
+
+        body.light-theme .habit-calendar-day.missed {
+            background: rgba(0, 0, 0, 0.05);
+            color: #94a3b8;
+        }
     </style>
 </head>
 <body>
@@ -890,7 +1552,22 @@
                 <button class="user-tab" data-user="A">Димочка 🦊</button>
                 <button class="user-tab" data-user="B">Дашенька 🦋</button>
             </div>
+            <div class="header-actions">
+                <button class="icon-btn" id="analyticsBtn" title="Аналитика">📊</button>
+                <button class="icon-btn" id="themeToggle" title="Сменить тему">🌙</button>
+                <button class="icon-btn" id="settingsBtn" title="Настройки">⚙️</button>
+            </div>
         </header>
+
+        <!-- Pause Mode Banner -->
+        <div class="pause-banner" id="pauseBanner">
+            <div class="pause-banner-icon">🏖️</div>
+            <div class="pause-banner-text">
+                <h4>Режим отпуска</h4>
+                <p>Отслеживание привычек приостановлено. Отдыхай!</p>
+            </div>
+            <button class="pause-banner-end" id="endPauseBtn">Завершить</button>
+        </div>
 
         <div class="global-progress">
             <h3>Общий прогресс</h3>
@@ -917,6 +1594,8 @@
                     <h2>Привычки</h2>
                     <span class="selected-date" id="selectedDateText">Сегодня</span>
                 </div>
+                
+                <div class="category-filter" id="categoryFilter"></div>
                 
                 <div class="habits-list" id="habitsList"></div>
                 
@@ -980,6 +1659,11 @@
                             <label>Общая цель (опционально)</label>
                             <input type="number" id="habitTarget" placeholder="100 медитаций за год" min="1">
                         </div>
+                        <div class="form-group">
+                            <label>Категория (опционально)</label>
+                            <input type="text" id="habitCategory" placeholder="Здоровье, Спорт..." list="categoryList">
+                            <datalist id="categoryList"></datalist>
+                        </div>
                     </div>
                     <div class="form-actions">
                         <button class="btn btn-secondary" id="cancelHabit">Отмена</button>
@@ -1034,21 +1718,99 @@
         </div>
     </div>
 
+    <!-- Settings Modal -->
+    <div class="settings-overlay" id="settingsOverlay">
+        <div class="settings-modal">
+            <div class="settings-header">
+                <div class="settings-title">⚙️ Настройки</div>
+                <button class="habit-detail-close" id="settingsClose">×</button>
+            </div>
+            
+            <div class="settings-section">
+                <h4>🏖️ Режим паузы</h4>
+                <div class="settings-row">
+                    <label>Включить режим отпуска</label>
+                    <div class="toggle-switch" id="pauseToggle"></div>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 8px;">
+                    Пропущенные дни в режиме паузы не считаются провалом
+                </p>
+            </div>
+            
+            <div class="settings-section">
+                <h4>💾 Данные</h4>
+                <div class="settings-buttons">
+                    <button class="btn btn-secondary" id="exportDataBtn">📤 Экспорт</button>
+                    <button class="btn btn-secondary" id="importDataBtn">📥 Импорт</button>
+                    <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                </div>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 8px;">
+                    Экспортируй данные для резервного копирования или переноса на другое устройство
+                </p>
+            </div>
+            
+            <div class="settings-section">
+                <h4>🎨 Внешний вид</h4>
+                <div class="settings-row">
+                    <label>Светлая тема</label>
+                    <div class="toggle-switch" id="themeToggleSettings"></div>
+                </div>
+            </div>
+            
+            <div class="settings-section">
+                <h4>🗑️ Опасная зона</h4>
+                <div class="settings-buttons">
+                    <button class="btn btn-secondary" id="resetProgressBtn" style="color: #f87171;">Сбросить прогресс</button>
+                    <button class="btn btn-secondary" id="deleteAllBtn" style="color: #f87171;">Удалить всё</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div class="analytics-overlay" id="analyticsOverlay">
+        <div class="analytics-modal">
+            <div class="analytics-header">
+                <div class="analytics-title">📊 Аналитика</div>
+                <button class="habit-detail-close" id="analyticsClose">×</button>
+            </div>
+            
+            <div class="stats-grid" id="analyticsStats"></div>
+            
+            <div class="analytics-tabs">
+                <button class="analytics-tab active" data-tab="weekly">Неделя</button>
+                <button class="analytics-tab" data-tab="monthly">Месяц</button>
+                <button class="analytics-tab" data-tab="heatmap">Тепловая карта</button>
+            </div>
+            
+            <div class="analytics-content" id="analyticsContent"></div>
+        </div>
+    </div>
+
     <script>
         // ============ DATA LAYER ============
         const STORAGE_KEY = 'habit_tracker_data';
+        const SETTINGS_KEY = 'habit_tracker_settings';
         
         const defaultData = {
             habits: [],
             entries: {},
-            globalXP: 0
+            globalXP: 0,
+            pausedDays: [] // Array of date strings when pause mode was active
+        };
+
+        const defaultSettings = {
+            theme: 'dark',
+            pauseMode: false,
+            pauseStartDate: null
         };
 
         function loadData() {
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) {
                 try {
-                    return JSON.parse(stored);
+                    const parsed = JSON.parse(stored);
+                    return { ...defaultData, ...parsed };
                 } catch (e) {
                     console.error('Error parsing data:', e);
                 }
@@ -1060,15 +1822,34 @@
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
         }
 
+        function loadSettings() {
+            const stored = localStorage.getItem(SETTINGS_KEY);
+            if (stored) {
+                try {
+                    return { ...defaultSettings, ...JSON.parse(stored) };
+                } catch (e) {
+                    console.error('Error parsing settings:', e);
+                }
+            }
+            return { ...defaultSettings };
+        }
+
+        function saveSettings(settings) {
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        }
+
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
         }
 
         // ============ STATE ============
         let data = loadData();
+        let settings = loadSettings();
         let selectedDate = new Date();
         let currentMonth = new Date();
         let userFilter = 'all';
+        let categoryFilter = 'all';
+        let currentAnalyticsTab = 'weekly';
 
         // ============ UTILS ============
         function formatDate(date) {
@@ -1162,6 +1943,46 @@
             }
         }
 
+        // ============ CATEGORIES ============
+        function getCategories() {
+            const cats = new Set();
+            data.habits.forEach(h => {
+                if (h.category) cats.add(h.category);
+            });
+            return Array.from(cats).sort();
+        }
+
+        function renderCategoryFilter() {
+            const container = document.getElementById('categoryFilter');
+            const categories = getCategories();
+            
+            if (categories.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            
+            let html = `<div class="category-chip ${categoryFilter === 'all' ? 'active' : ''}" data-category="all">Все</div>`;
+            categories.forEach(cat => {
+                html += `<div class="category-chip ${categoryFilter === cat ? 'active' : ''}" data-category="${cat}">${cat}</div>`;
+            });
+            
+            container.innerHTML = html;
+            
+            container.querySelectorAll('.category-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    categoryFilter = chip.dataset.category;
+                    renderCategoryFilter();
+                    renderHabits();
+                });
+            });
+        }
+
+        function updateCategoryDatalist() {
+            const datalist = document.getElementById('categoryList');
+            const categories = getCategories();
+            datalist.innerHTML = categories.map(c => `<option value="${c}">`).join('');
+        }
+
         // ============ HABITS ============
         function renderHabits() {
             const list = document.getElementById('habitsList');
@@ -1172,6 +1993,11 @@
             let habits = data.habits;
             if (userFilter !== 'all') {
                 habits = habits.filter(h => h.owner === userFilter || h.owner === 'shared');
+            }
+            
+            // Filter by category
+            if (categoryFilter !== 'all') {
+                habits = habits.filter(h => h.category === categoryFilter);
             }
             
             if (habits.length === 0) {
@@ -1190,6 +2016,7 @@
                 const ownerClass = `owner-${habit.owner}`;
                 const ownerNames = { A: 'Димочка 🦊', B: 'Дашенька 🦋', shared: 'Общая 💕' };
                 const ownerLabel = ownerNames[habit.owner] || habit.owner;
+                const categoryHtml = habit.category ? `<span class="category-badge">${habit.category}</span>` : '';
                 
                 const actionsHtml = `
                     <div class="habit-actions">
@@ -1210,7 +2037,8 @@
                         </div>
                     ` : '';
                     return `
-                        <div class="habit-item" data-habit-id="${habit.id}">
+                        <div class="habit-item" data-habit-id="${habit.id}" draggable="true">
+                            <div class="habit-drag-handle" title="Перетащите для сортировки">⋮⋮</div>
                             <div class="habit-checkbox ${checked ? 'checked' : ''}" onclick="toggleBinaryHabit('${habit.id}')">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
                                     <polyline points="20 6 9 17 4 12"></polyline>
@@ -1220,6 +2048,7 @@
                                 <div class="habit-name">
                                     ${habit.name}
                                     <span class="habit-owner ${ownerClass}">${ownerLabel}</span>
+                                    ${categoryHtml}
                                     ${targetHtml}
                                 </div>
                                 <div class="habit-progress">
@@ -1239,7 +2068,8 @@
                     const goalPeriodLabel = getGoalPeriodLabel(habit.goalType, habit.customPeriod);
                     const goalLabel = habit.goal ? `/ ${habit.goal} ${goalPeriodLabel}` : '';
                     return `
-                        <div class="habit-item" data-habit-id="${habit.id}">
+                        <div class="habit-item" data-habit-id="${habit.id}" draggable="true">
+                            <div class="habit-drag-handle" title="Перетащите для сортировки">⋮⋮</div>
                             <input type="number" class="numeric-input ${inputClass}" value="${numValue}" min="0" 
                                    onchange="updateNumericHabit('${habit.id}', this.value)">
                             <div class="habit-info" onclick="showHabitDetail('${habit.id}')" style="cursor: pointer;">
@@ -1247,6 +2077,7 @@
                                     ${habit.name}
                                     ${goalLabel ? `<span class="numeric-goal">${goalLabel}</span>` : ''}
                                     <span class="habit-owner ${ownerClass}">${ownerLabel}</span>
+                                    ${categoryHtml}
                                 </div>
                                 <div class="habit-progress">
                                     <div class="habit-progress-bar">
@@ -1260,6 +2091,61 @@
                     `;
                 }
             }).join('');
+            
+            // Setup drag and drop
+            setupDragAndDrop();
+        }
+        
+        // ============ DRAG AND DROP ============
+        let draggedHabit = null;
+        
+        function setupDragAndDrop() {
+            const items = document.querySelectorAll('.habit-item');
+            
+            items.forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    draggedHabit = item;
+                    item.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                
+                item.addEventListener('dragend', () => {
+                    item.classList.remove('dragging');
+                    document.querySelectorAll('.habit-item').forEach(i => i.classList.remove('drag-over'));
+                    draggedHabit = null;
+                });
+                
+                item.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    if (draggedHabit && draggedHabit !== item) {
+                        item.classList.add('drag-over');
+                    }
+                });
+                
+                item.addEventListener('dragleave', () => {
+                    item.classList.remove('drag-over');
+                });
+                
+                item.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    item.classList.remove('drag-over');
+                    
+                    if (draggedHabit && draggedHabit !== item) {
+                        const draggedId = draggedHabit.dataset.habitId;
+                        const targetId = item.dataset.habitId;
+                        
+                        const draggedIndex = data.habits.findIndex(h => h.id === draggedId);
+                        const targetIndex = data.habits.findIndex(h => h.id === targetId);
+                        
+                        if (draggedIndex !== -1 && targetIndex !== -1) {
+                            const [removed] = data.habits.splice(draggedIndex, 1);
+                            data.habits.splice(targetIndex, 0, removed);
+                            saveData(data);
+                            renderHabits();
+                        }
+                    }
+                });
+            });
         }
 
         function getPeriodLabel(period) {
@@ -1734,6 +2620,7 @@
             const goalType = document.getElementById('habitGoalType').value;
             const customPeriod = parseInt(document.getElementById('habitCustomPeriod').value) || null;
             const target = parseInt(document.getElementById('habitTarget').value) || null;
+            const category = document.getElementById('habitCategory').value.trim() || null;
             
             if (!name) {
                 alert('Введите название привычки');
@@ -1753,7 +2640,8 @@
                         goal: type === 'numeric' ? goal : null,
                         goalType: type === 'numeric' ? goalType : null,
                         customPeriod: type === 'numeric' && goalType === 'custom' ? customPeriod : null,
-                        target
+                        target,
+                        category
                     };
                 }
             } else {
@@ -1767,7 +2655,8 @@
                     goal: type === 'numeric' ? goal : null,
                     goalType: type === 'numeric' ? goalType : null,
                     customPeriod: type === 'numeric' && goalType === 'custom' ? customPeriod : null,
-                    target
+                    target,
+                    category
                 };
                 data.habits.push(habit);
             }
@@ -1779,6 +2668,8 @@
             clearForm();
             
             renderHabits();
+            renderCategoryFilter();
+            updateCategoryDatalist();
             updateProgressBars();
         });
 
@@ -1796,6 +2687,7 @@
             document.getElementById('habitGoalType').value = habit.goalType || 'daily';
             document.getElementById('habitCustomPeriod').value = habit.customPeriod || '';
             document.getElementById('habitTarget').value = habit.target || '';
+            document.getElementById('habitCategory').value = habit.category || '';
             
             const isNumeric = habit.type === 'numeric';
             goalGroup.style.display = isNumeric ? 'block' : 'none';
@@ -1834,6 +2726,7 @@
             document.getElementById('habitGoalType').value = 'daily';
             document.getElementById('habitCustomPeriod').value = '';
             document.getElementById('habitTarget').value = '';
+            document.getElementById('habitCategory').value = '';
             goalGroup.style.display = 'none';
             goalTypeGroup.style.display = 'none';
             customPeriodGroup.style.display = 'none';
@@ -1869,6 +2762,9 @@
             'Каждый день — новая возможность.',
             'Привычки формируют характер.',
             'Делай то, что можешь, с тем, что есть.',
+            'Важно не упасть, а подняться.',
+            'Каждое усилие имеет значение.',
+            'Ты справляешься лучше, чем думаешь.',
         ];
 
         function updateMotivation() {
@@ -1876,10 +2772,537 @@
             el.textContent = quotes[Math.floor(Math.random() * quotes.length)];
         }
 
+        // ============ THEME ============
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                document.body.classList.add('light-theme');
+                document.getElementById('themeToggle').textContent = '☀️';
+            } else {
+                document.body.classList.remove('light-theme');
+                document.getElementById('themeToggle').textContent = '🌙';
+            }
+            // Update meta theme-color
+            document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#f8fafc' : '#0f0f1a';
+        }
+
+        function toggleTheme() {
+            settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
+            saveSettings(settings);
+            applyTheme(settings.theme);
+            updateThemeToggleUI();
+        }
+
+        function updateThemeToggleUI() {
+            const toggle = document.getElementById('themeToggleSettings');
+            if (settings.theme === 'light') {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+        document.getElementById('themeToggleSettings').addEventListener('click', toggleTheme);
+
+        // ============ PAUSE MODE ============
+        function updatePauseModeUI() {
+            const banner = document.getElementById('pauseBanner');
+            const toggle = document.getElementById('pauseToggle');
+            
+            if (settings.pauseMode) {
+                banner.classList.add('active');
+                toggle.classList.add('active');
+            } else {
+                banner.classList.remove('active');
+                toggle.classList.remove('active');
+            }
+        }
+
+        function togglePauseMode() {
+            settings.pauseMode = !settings.pauseMode;
+            if (settings.pauseMode) {
+                settings.pauseStartDate = formatDate(new Date());
+            } else {
+                // Mark paused days
+                if (settings.pauseStartDate) {
+                    const start = new Date(settings.pauseStartDate);
+                    const end = new Date();
+                    const current = new Date(start);
+                    
+                    if (!data.pausedDays) data.pausedDays = [];
+                    
+                    while (current <= end) {
+                        const dateStr = formatDate(current);
+                        if (!data.pausedDays.includes(dateStr)) {
+                            data.pausedDays.push(dateStr);
+                        }
+                        current.setDate(current.getDate() + 1);
+                    }
+                    saveData(data);
+                }
+                settings.pauseStartDate = null;
+            }
+            saveSettings(settings);
+            updatePauseModeUI();
+        }
+
+        document.getElementById('pauseToggle').addEventListener('click', togglePauseMode);
+        document.getElementById('endPauseBtn').addEventListener('click', togglePauseMode);
+
+        // ============ SETTINGS MODAL ============
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            document.getElementById('settingsOverlay').classList.add('active');
+            updateThemeToggleUI();
+            updatePauseModeUI();
+        });
+
+        document.getElementById('settingsClose').addEventListener('click', () => {
+            document.getElementById('settingsOverlay').classList.remove('active');
+        });
+
+        document.getElementById('settingsOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'settingsOverlay') {
+                document.getElementById('settingsOverlay').classList.remove('active');
+            }
+        });
+
+        // ============ EXPORT / IMPORT ============
+        document.getElementById('exportDataBtn').addEventListener('click', () => {
+            const exportData = {
+                habits: data.habits,
+                entries: data.entries,
+                pausedDays: data.pausedDays || [],
+                settings: settings,
+                exportDate: new Date().toISOString(),
+                version: '2.0'
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `habit-tracker-backup-${formatDate(new Date())}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('importDataBtn').addEventListener('click', () => {
+            document.getElementById('importFileInput').click();
+        });
+
+        document.getElementById('importFileInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const importedData = JSON.parse(event.target.result);
+                    
+                    if (importedData.habits && importedData.entries) {
+                        if (confirm('Импортировать данные? Текущие данные будут заменены.')) {
+                            data.habits = importedData.habits || [];
+                            data.entries = importedData.entries || {};
+                            data.pausedDays = importedData.pausedDays || [];
+                            saveData(data);
+                            
+                            if (importedData.settings) {
+                                settings = { ...defaultSettings, ...importedData.settings };
+                                saveSettings(settings);
+                                applyTheme(settings.theme);
+                            }
+                            
+                            renderCalendar();
+                            renderHabits();
+                            renderCategoryFilter();
+                            updateProgressBars();
+                            updatePauseModeUI();
+                            
+                            alert('Данные успешно импортированы!');
+                        }
+                    } else {
+                        alert('Неверный формат файла');
+                    }
+                } catch (err) {
+                    alert('Ошибка при чтении файла: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = ''; // Reset input
+        });
+
+        // ============ DANGER ZONE ============
+        document.getElementById('resetProgressBtn').addEventListener('click', () => {
+            if (confirm('Сбросить весь прогресс? Привычки останутся, но все отметки будут удалены.')) {
+                data.entries = {};
+                data.pausedDays = [];
+                saveData(data);
+                renderCalendar();
+                renderHabits();
+                updateProgressBars();
+                alert('Прогресс сброшен');
+            }
+        });
+
+        document.getElementById('deleteAllBtn').addEventListener('click', () => {
+            if (confirm('Удалить ВСЕ данные? Это действие нельзя отменить!')) {
+                if (confirm('Вы уверены? Все привычки и прогресс будут потеряны навсегда.')) {
+                    data = { ...defaultData };
+                    saveData(data);
+                    renderCalendar();
+                    renderHabits();
+                    renderCategoryFilter();
+                    updateProgressBars();
+                    alert('Все данные удалены');
+                }
+            }
+        });
+
+        // ============ ANALYTICS ============
+        document.getElementById('analyticsBtn').addEventListener('click', () => {
+            document.getElementById('analyticsOverlay').classList.add('active');
+            renderAnalytics();
+        });
+
+        document.getElementById('analyticsClose').addEventListener('click', () => {
+            document.getElementById('analyticsOverlay').classList.remove('active');
+        });
+
+        document.getElementById('analyticsOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'analyticsOverlay') {
+                document.getElementById('analyticsOverlay').classList.remove('active');
+            }
+        });
+
+        document.querySelectorAll('.analytics-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.analytics-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentAnalyticsTab = tab.dataset.tab;
+                renderAnalyticsContent();
+            });
+        });
+
+        function renderAnalytics() {
+            renderAnalyticsStats();
+            renderAnalyticsContent();
+        }
+
+        function renderAnalyticsStats() {
+            const container = document.getElementById('analyticsStats');
+            const now = new Date();
+            
+            // Calculate overall stats
+            let totalCompletions = 0;
+            let totalDays = 0;
+            let activeDays = new Set();
+            let longestStreak = 0;
+            let currentStreak = 0;
+            
+            // Count total completions across all habits
+            Object.keys(data.entries).forEach(dateStr => {
+                const dayData = data.entries[dateStr];
+                let dayHasActivity = false;
+                Object.keys(dayData).forEach(habitId => {
+                    const value = dayData[habitId];
+                    if (value === true || (typeof value === 'number' && value > 0)) {
+                        totalCompletions++;
+                        dayHasActivity = true;
+                    }
+                });
+                if (dayHasActivity) {
+                    activeDays.add(dateStr);
+                }
+            });
+            
+            // Calculate current streak (days in a row with at least one completion)
+            for (let i = 0; i <= 365; i++) {
+                const date = new Date(now);
+                date.setDate(now.getDate() - i);
+                const dateStr = formatDate(date);
+                
+                if (activeDays.has(dateStr)) {
+                    currentStreak++;
+                } else if (i > 0) {
+                    break;
+                }
+            }
+            
+            // Calculate longest streak
+            const sortedDates = Array.from(activeDays).sort();
+            let tempStreak = 0;
+            let prevDate = null;
+            
+            sortedDates.forEach(dateStr => {
+                const date = new Date(dateStr);
+                if (prevDate) {
+                    const diff = (date - prevDate) / (1000 * 60 * 60 * 24);
+                    if (diff === 1) {
+                        tempStreak++;
+                    } else {
+                        tempStreak = 1;
+                    }
+                } else {
+                    tempStreak = 1;
+                }
+                if (tempStreak > longestStreak) longestStreak = tempStreak;
+                prevDate = date;
+            });
+            
+            container.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-card-value">${data.habits.length}</div>
+                    <div class="stat-card-label">привычек</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-value">${totalCompletions}</div>
+                    <div class="stat-card-label">выполнений</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-value">${activeDays.size}</div>
+                    <div class="stat-card-label">активных дней</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-value">${currentStreak}</div>
+                    <div class="stat-card-label">текущая серия</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-value">${longestStreak}</div>
+                    <div class="stat-card-label">лучшая серия</div>
+                </div>
+            `;
+        }
+
+        function renderAnalyticsContent() {
+            const container = document.getElementById('analyticsContent');
+            
+            switch (currentAnalyticsTab) {
+                case 'weekly':
+                    renderWeeklyChart(container);
+                    break;
+                case 'monthly':
+                    renderMonthlyChart(container);
+                    break;
+                case 'heatmap':
+                    renderHeatmap(container);
+                    break;
+            }
+        }
+
+        function renderWeeklyChart(container) {
+            const now = new Date();
+            const weekDaysShort = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            
+            // Get data for last 7 days
+            const weekData = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date(now);
+                date.setDate(now.getDate() - i);
+                const dateStr = formatDate(date);
+                
+                let completions = 0;
+                if (data.entries[dateStr]) {
+                    Object.values(data.entries[dateStr]).forEach(value => {
+                        if (value === true || (typeof value === 'number' && value > 0)) {
+                            completions++;
+                        }
+                    });
+                }
+                
+                const dayOfWeek = date.getDay();
+                const adjustedDay = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+                
+                weekData.push({
+                    label: weekDaysShort[adjustedDay],
+                    value: completions,
+                    date: dateStr
+                });
+            }
+            
+            const maxValue = Math.max(...weekData.map(d => d.value), 1);
+            
+            container.innerHTML = `
+                <div class="chart-container">
+                    <div class="chart-title">Выполнения за последние 7 дней</div>
+                    <div class="bar-chart">
+                        ${weekData.map(d => `
+                            <div class="bar-item">
+                                <div class="bar" style="height: ${(d.value / maxValue) * 120}px"></div>
+                                <div class="bar-label">${d.label}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Детали по дням</div>
+                    ${weekData.map(d => `
+                        <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <span style="color: #94a3b8;">${d.label} (${d.date.split('-').slice(1).join('.')})</span>
+                            <span style="color: #f472b6; font-weight: 600;">${d.value} выполнений</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderMonthlyChart(container) {
+            const now = new Date();
+            
+            // Get data for last 4 weeks
+            const weekData = [];
+            for (let week = 3; week >= 0; week--) {
+                let weekTotal = 0;
+                const weekStart = new Date(now);
+                weekStart.setDate(now.getDate() - (week * 7 + 6));
+                const weekEnd = new Date(now);
+                weekEnd.setDate(now.getDate() - (week * 7));
+                
+                for (let i = 0; i < 7; i++) {
+                    const date = new Date(weekStart);
+                    date.setDate(weekStart.getDate() + i);
+                    const dateStr = formatDate(date);
+                    
+                    if (data.entries[dateStr]) {
+                        Object.values(data.entries[dateStr]).forEach(value => {
+                            if (value === true || (typeof value === 'number' && value > 0)) {
+                                weekTotal++;
+                            }
+                        });
+                    }
+                }
+                
+                weekData.push({
+                    label: `Неделя ${4 - week}`,
+                    value: weekTotal,
+                    range: `${weekStart.getDate()}.${weekStart.getMonth()+1} - ${weekEnd.getDate()}.${weekEnd.getMonth()+1}`
+                });
+            }
+            
+            const maxValue = Math.max(...weekData.map(d => d.value), 1);
+            
+            container.innerHTML = `
+                <div class="chart-container">
+                    <div class="chart-title">Выполнения за последние 4 недели</div>
+                    <div class="bar-chart">
+                        ${weekData.map(d => `
+                            <div class="bar-item">
+                                <div class="bar" style="height: ${(d.value / maxValue) * 120}px"></div>
+                                <div class="bar-label">${d.label}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">По привычкам (за месяц)</div>
+                    ${data.habits.map(habit => {
+                        let count = 0;
+                        for (let i = 0; i < 30; i++) {
+                            const date = new Date(now);
+                            date.setDate(now.getDate() - i);
+                            const dateStr = formatDate(date);
+                            const entry = data.entries[dateStr]?.[habit.id];
+                            if (entry === true || (typeof entry === 'number' && entry > 0)) {
+                                count++;
+                            }
+                        }
+                        const percentage = Math.round((count / 30) * 100);
+                        return `
+                            <div style="margin-bottom: 12px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span style="color: #e2e8f0;">${habit.name}</span>
+                                    <span style="color: #94a3b8;">${count}/30 дней (${percentage}%)</span>
+                                </div>
+                                <div class="progress-bar" style="height: 6px;">
+                                    <div class="progress-fill" style="width: ${percentage}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function renderHeatmap(container) {
+            const now = new Date();
+            const weeks = 12; // 12 weeks of data
+            
+            // Generate heatmap data
+            const heatmapData = [];
+            for (let i = weeks * 7 - 1; i >= 0; i--) {
+                const date = new Date(now);
+                date.setDate(now.getDate() - i);
+                const dateStr = formatDate(date);
+                
+                let completions = 0;
+                if (data.entries[dateStr]) {
+                    Object.values(data.entries[dateStr]).forEach(value => {
+                        if (value === true || (typeof value === 'number' && value > 0)) {
+                            completions++;
+                        }
+                    });
+                }
+                
+                heatmapData.push({
+                    date: dateStr,
+                    value: completions
+                });
+            }
+            
+            const maxValue = Math.max(...heatmapData.map(d => d.value), 1);
+            
+            function getLevel(value) {
+                if (value === 0) return 0;
+                const ratio = value / maxValue;
+                if (ratio <= 0.2) return 1;
+                if (ratio <= 0.4) return 2;
+                if (ratio <= 0.6) return 3;
+                if (ratio <= 0.8) return 4;
+                return 5;
+            }
+            
+            container.innerHTML = `
+                <div class="chart-container">
+                    <div class="chart-title">Активность за последние ${weeks} недель</div>
+                    <div class="heatmap">
+                        ${heatmapData.map(d => `
+                            <div class="heatmap-cell level-${getLevel(d.value)}" title="${d.date}: ${d.value} выполнений"></div>
+                        `).join('')}
+                    </div>
+                    <div class="heatmap-legend">
+                        <span>Меньше</span>
+                        <div class="heatmap-legend-cell" style="background: rgba(255,255,255,0.05);"></div>
+                        <div class="heatmap-legend-cell level-1" style="background: rgba(236, 72, 153, 0.2);"></div>
+                        <div class="heatmap-legend-cell level-2" style="background: rgba(236, 72, 153, 0.4);"></div>
+                        <div class="heatmap-legend-cell level-3" style="background: rgba(236, 72, 153, 0.6);"></div>
+                        <div class="heatmap-legend-cell level-4" style="background: rgba(236, 72, 153, 0.8);"></div>
+                        <div class="heatmap-legend-cell level-5" style="background: #ec4899;"></div>
+                        <span>Больше</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============ PWA / SERVICE WORKER ============
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => {
+                    console.log('ServiceWorker registration failed (optional):', err);
+                });
+            });
+        }
+
         // ============ INIT ============
         function init() {
+            // Apply saved theme
+            applyTheme(settings.theme);
+            updatePauseModeUI();
+            
             renderCalendar();
             renderHabits();
+            renderCategoryFilter();
+            updateCategoryDatalist();
             updateProgressBars();
             updateMotivation();
             updateSelectedDateText();
