@@ -830,21 +830,498 @@
             padding: 16px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .user-progress-card h3 {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            margin-bottom: 8px;
+        .user-progress-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(244, 114, 182, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-progress-card[data-user="B"]:hover {
+            border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        .user-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(244, 114, 182, 0.2) 100%);
+            border: 2px solid rgba(244, 114, 182, 0.3);
+            flex-shrink: 0;
+        }
+
+        .user-avatar.user-b {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(192, 132, 252, 0.2) 100%);
+            border-color: rgba(192, 132, 252, 0.3);
+        }
+
+        .user-card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-card-info h3 {
+            font-size: 1rem;
+            color: #f1f5f9;
+            margin-bottom: 2px;
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .user-level {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-level.user-b {
+            background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
+        }
+
+        .user-xp-text {
+            font-size: 0.75rem;
+            color: #64748b;
         }
 
         .user-progress-card h3 .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
+        }
+
+        /* Character Profile Modal */
+        .profile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .profile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .profile-modal {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 24px;
+            padding: 0;
+            max-width: 480px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-overlay.active .profile-modal {
+            transform: scale(1);
+        }
+
+        .profile-header {
+            position: relative;
+            padding: 30px 24px 60px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, rgba(168, 85, 247, 0.2) 100%);
+            border-radius: 24px 24px 0 0;
+            text-align: center;
+        }
+
+        .profile-header.user-b {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3) 0%, rgba(129, 140, 248, 0.2) 100%);
+        }
+
+        .profile-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .profile-close:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 4px solid rgba(244, 114, 182, 0.5);
+            margin: 0 auto 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            border-color: #f472b6;
+        }
+
+        .profile-avatar.user-b {
+            border-color: rgba(192, 132, 252, 0.5);
+        }
+
+        .profile-avatar.user-b:hover {
+            border-color: #c084fc;
+        }
+
+        .profile-avatar-edit {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            color: white;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+
+        .profile-title {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .profile-level-badge {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 8px 24px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        .profile-level-badge.user-b {
+            background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
+            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+        }
+
+        .profile-content {
+            padding: 36px 24px 24px;
+        }
+
+        .profile-xp-section {
+            margin-bottom: 24px;
+        }
+
+        .profile-xp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .profile-xp-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .profile-xp-value {
+            font-size: 0.85rem;
+            color: #f472b6;
+            font-weight: 600;
+        }
+
+        .profile-xp-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .profile-xp-fill {
+            height: 100%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #ec4899 0%, #f472b6 50%, #c084fc 100%);
+            transition: width 0.5s ease;
+            box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .profile-stat {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .profile-stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .profile-stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f1f5f9;
+        }
+
+        .profile-stat-label {
+            font-size: 0.7rem;
+            color: #64748b;
+        }
+
+        .profile-section {
+            margin-bottom: 20px;
+        }
+
+        .profile-section-title {
+            font-size: 0.8rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-superpower {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
+            border: 1px solid rgba(244, 114, 182, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .profile-superpower-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .profile-superpower-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f472b6;
+            margin-bottom: 4px;
+        }
+
+        .profile-superpower-desc {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .profile-traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .profile-trait {
+            padding: 6px 12px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            color: #e2e8f0;
+        }
+
+        .profile-bio {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .profile-edit-btn {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed #475569;
+            border-radius: 12px;
+            background: transparent;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+
+        .profile-edit-btn:hover {
+            border-color: #f472b6;
+            color: #f472b6;
+        }
+
+        /* Emoji Picker */
+        .emoji-picker-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+        }
+
+        .emoji-picker-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .emoji-picker {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 320px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .emoji-picker-title {
+            font-size: 1rem;
+            color: #f1f5f9;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .emoji-option {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .emoji-option:hover {
+            background: rgba(244, 114, 182, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Profile Edit Form */
+        .profile-edit-form {
+            display: none;
+        }
+
+        .profile-edit-form.active {
+            display: block;
+        }
+
+        .profile-field {
+            margin-bottom: 16px;
+        }
+
+        .profile-field label {
+            display: block;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .profile-field input,
+        .profile-field textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #475569;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .profile-field textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .profile-field input:focus,
+        .profile-field textarea:focus {
+            outline: none;
+            border-color: #f472b6;
+        }
+
+        .profile-edit-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
         }
 
         .user-progress-card h3 .dot.user-a {
@@ -1541,6 +2018,60 @@
             background: rgba(0, 0, 0, 0.05);
             color: #94a3b8;
         }
+
+        body.light-theme .profile-modal {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        body.light-theme .profile-avatar {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        body.light-theme .profile-name {
+            color: #1e293b;
+        }
+
+        body.light-theme .profile-stat {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        body.light-theme .profile-stat-value {
+            color: #1e293b;
+        }
+
+        body.light-theme .profile-trait {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #1e293b;
+        }
+
+        body.light-theme .profile-bio {
+            background: rgba(0, 0, 0, 0.03);
+            color: #64748b;
+        }
+
+        body.light-theme .emoji-picker {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        body.light-theme .emoji-picker-title {
+            color: #1e293b;
+        }
+
+        body.light-theme .emoji-option {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .profile-field input,
+        body.light-theme .profile-field textarea {
+            background: rgba(255, 255, 255, 0.8);
+            color: #1e293b;
+            border-color: #94a3b8;
+        }
+
+        body.light-theme .user-card-info h3 {
+            color: #1e293b;
+        }
     </style>
 </head>
 <body>
@@ -1674,15 +2205,33 @@
         </div>
 
         <div class="user-progress">
-            <div class="user-progress-card">
-                <h3><span class="dot user-a"></span>Димочка 🦊</h3>
+            <div class="user-progress-card" data-user="A" onclick="showProfile('A')">
+                <div class="user-card-header">
+                    <div class="user-avatar" id="userAAvatar">🦊</div>
+                    <div class="user-card-info">
+                        <h3>
+                            <span id="userAName">Димочка</span>
+                            <span class="user-level" id="userALevel">Ур. 1</span>
+                        </h3>
+                        <div class="user-xp-text" id="userAXpText">0 / 100 XP</div>
+                    </div>
+                </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="userAProgress" style="width: 0%"></div>
                 </div>
                 <div class="progress-text" id="userAProgressText">0%</div>
             </div>
-            <div class="user-progress-card">
-                <h3><span class="dot user-b"></span>Дашенька 🦋</h3>
+            <div class="user-progress-card" data-user="B" onclick="showProfile('B')">
+                <div class="user-card-header">
+                    <div class="user-avatar user-b" id="userBAvatar">🦋</div>
+                    <div class="user-card-info">
+                        <h3>
+                            <span id="userBName">Дашенька</span>
+                            <span class="user-level user-b" id="userBLevel">Ур. 1</span>
+                        </h3>
+                        <div class="user-xp-text" id="userBXpText">0 / 100 XP</div>
+                    </div>
+                </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="userBProgress" style="width: 0%; background: linear-gradient(90deg, #a855f7 0%, #c084fc 100%);"></div>
                 </div>
@@ -1787,10 +2336,134 @@
         </div>
     </div>
 
+    <!-- Character Profile Modal -->
+    <div class="profile-overlay" id="profileOverlay">
+        <div class="profile-modal">
+            <div class="profile-header" id="profileHeader">
+                <button class="profile-close" id="profileClose">×</button>
+                <div class="profile-avatar" id="profileAvatar" onclick="openEmojiPicker()">
+                    🦊
+                    <div class="profile-avatar-edit">✎</div>
+                </div>
+                <div class="profile-name" id="profileName">Димочка</div>
+                <div class="profile-title" id="profileTitle">Начинающий герой</div>
+                <div class="profile-level-badge" id="profileLevelBadge">Уровень 1</div>
+            </div>
+            
+            <div class="profile-content">
+                <!-- XP Progress -->
+                <div class="profile-xp-section">
+                    <div class="profile-xp-header">
+                        <span class="profile-xp-label">Опыт</span>
+                        <span class="profile-xp-value" id="profileXpValue">0 / 100 XP</span>
+                    </div>
+                    <div class="profile-xp-bar">
+                        <div class="profile-xp-fill" id="profileXpFill" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="profile-stats" id="profileStats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-icon">🔥</div>
+                        <div class="profile-stat-value" id="profileStreak">0</div>
+                        <div class="profile-stat-label">Серия дней</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-icon">✅</div>
+                        <div class="profile-stat-value" id="profileCompleted">0</div>
+                        <div class="profile-stat-label">Выполнено</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-icon">📅</div>
+                        <div class="profile-stat-value" id="profileDays">0</div>
+                        <div class="profile-stat-label">Активных дней</div>
+                    </div>
+                </div>
+                
+                <!-- View Mode -->
+                <div id="profileViewMode">
+                    <!-- Superpower -->
+                    <div class="profile-section">
+                        <div class="profile-section-title">⚡ Суперсила</div>
+                        <div class="profile-superpower" id="profileSuperpower">
+                            <div class="profile-superpower-icon" id="superpowerIcon">🌟</div>
+                            <div class="profile-superpower-name" id="superpowerName">Не задана</div>
+                            <div class="profile-superpower-desc" id="superpowerDesc">Нажми "Редактировать" чтобы добавить свою суперсилу!</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Traits -->
+                    <div class="profile-section">
+                        <div class="profile-section-title">🏷️ Черты характера</div>
+                        <div class="profile-traits" id="profileTraits">
+                            <span class="profile-trait">Целеустремлённость</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Bio -->
+                    <div class="profile-section">
+                        <div class="profile-section-title">📝 О себе</div>
+                        <div class="profile-bio" id="profileBio">
+                            Расскажи о себе...
+                        </div>
+                    </div>
+                    
+                    <button class="profile-edit-btn" onclick="toggleProfileEdit(true)">✎ Редактировать профиль</button>
+                </div>
+                
+                <!-- Edit Mode -->
+                <div class="profile-edit-form" id="profileEditMode">
+                    <div class="profile-field">
+                        <label>Имя</label>
+                        <input type="text" id="editName" placeholder="Твоё имя">
+                    </div>
+                    <div class="profile-field">
+                        <label>Титул</label>
+                        <input type="text" id="editTitle" placeholder="Начинающий герой, Мастер привычек...">
+                    </div>
+                    <div class="profile-field">
+                        <label>⚡ Суперсила (эмодзи)</label>
+                        <input type="text" id="editSuperpowerIcon" placeholder="🌟, ⚡, 🔥..." maxlength="2">
+                    </div>
+                    <div class="profile-field">
+                        <label>⚡ Название суперсилы</label>
+                        <input type="text" id="editSuperpowerName" placeholder="Несокрушимая воля">
+                    </div>
+                    <div class="profile-field">
+                        <label>⚡ Описание суперсилы</label>
+                        <input type="text" id="editSuperpowerDesc" placeholder="Могу превратить любую задачу в привычку">
+                    </div>
+                    <div class="profile-field">
+                        <label>🏷️ Черты характера (через запятую)</label>
+                        <input type="text" id="editTraits" placeholder="Целеустремлённость, Упорство, Позитив">
+                    </div>
+                    <div class="profile-field">
+                        <label>📝 О себе</label>
+                        <textarea id="editBio" placeholder="Расскажи о себе, своих целях и мечтах..."></textarea>
+                    </div>
+                    <div class="profile-edit-actions">
+                        <button class="btn btn-secondary" onclick="toggleProfileEdit(false)">Отмена</button>
+                        <button class="btn btn-primary" onclick="saveProfile()">Сохранить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emoji Picker -->
+    <div class="emoji-picker-overlay" id="emojiPickerOverlay">
+        <div class="emoji-picker">
+            <div class="emoji-picker-title">Выбери аватар</div>
+            <div class="emoji-grid" id="emojiGrid"></div>
+        </div>
+    </div>
+
     <script>
         // ============ DATA LAYER ============
         const STORAGE_KEY = 'habit_tracker_data';
         const SETTINGS_KEY = 'habit_tracker_settings';
+        const PROFILES_KEY = 'habit_tracker_profiles';
         
         const defaultData = {
             habits: [],
@@ -1803,6 +2476,33 @@
             theme: 'dark',
             pauseMode: false,
             pauseStartDate: null
+        };
+
+        const defaultProfiles = {
+            A: {
+                name: 'Димочка',
+                avatar: '🦊',
+                title: 'Начинающий герой',
+                superpowerIcon: '🌟',
+                superpowerName: 'Не задана',
+                superpowerDesc: 'Нажми "Редактировать" чтобы добавить свою суперсилу!',
+                traits: ['Целеустремлённость'],
+                bio: 'Расскажи о себе...',
+                xp: 0,
+                level: 1
+            },
+            B: {
+                name: 'Дашенька',
+                avatar: '🦋',
+                title: 'Начинающий герой',
+                superpowerIcon: '✨',
+                superpowerName: 'Не задана',
+                superpowerDesc: 'Нажми "Редактировать" чтобы добавить свою суперсилу!',
+                traits: ['Целеустремлённость'],
+                bio: 'Расскажи о себе...',
+                xp: 0,
+                level: 1
+            }
         };
 
         function loadData() {
@@ -1838,6 +2538,26 @@
             localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
         }
 
+        function loadProfiles() {
+            const stored = localStorage.getItem(PROFILES_KEY);
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    return {
+                        A: { ...defaultProfiles.A, ...parsed.A },
+                        B: { ...defaultProfiles.B, ...parsed.B }
+                    };
+                } catch (e) {
+                    console.error('Error parsing profiles:', e);
+                }
+            }
+            return JSON.parse(JSON.stringify(defaultProfiles));
+        }
+
+        function saveProfiles(profiles) {
+            localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+        }
+
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
         }
@@ -1845,11 +2565,13 @@
         // ============ STATE ============
         let data = loadData();
         let settings = loadSettings();
+        let profiles = loadProfiles();
         let selectedDate = new Date();
         let currentMonth = new Date();
         let userFilter = 'all';
         let categoryFilter = 'all';
         let currentAnalyticsTab = 'weekly';
+        let currentProfileUser = 'A';
 
         // ============ UTILS ============
         function formatDate(date) {
@@ -2570,6 +3292,9 @@
             const globalProgress = (userAProgress + userBProgress) / 2;
             document.getElementById('globalProgressFill').style.width = `${globalProgress}%`;
             document.getElementById('globalProgressText').textContent = `${Math.round(globalProgress)}%`;
+            
+            // Update user cards with XP and levels
+            updateUserCards();
         }
 
         // ============ ADD/EDIT HABIT FORM ============
@@ -2873,8 +3598,9 @@
                 entries: data.entries,
                 pausedDays: data.pausedDays || [],
                 settings: settings,
+                profiles: profiles,
                 exportDate: new Date().toISOString(),
-                version: '2.0'
+                version: '2.1'
             };
             
             const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
@@ -2914,11 +3640,20 @@
                                 applyTheme(settings.theme);
                             }
                             
+                            if (importedData.profiles) {
+                                profiles = {
+                                    A: { ...defaultProfiles.A, ...importedData.profiles.A },
+                                    B: { ...defaultProfiles.B, ...importedData.profiles.B }
+                                };
+                                saveProfiles(profiles);
+                            }
+                            
                             renderCalendar();
                             renderHabits();
                             renderCategoryFilter();
                             updateProgressBars();
                             updatePauseModeUI();
+                            updateUserCards();
                             
                             alert('Данные успешно импортированы!');
                         }
@@ -3284,6 +4019,261 @@
             `;
         }
 
+        // ============ CHARACTER PROFILES ============
+        const avatarEmojis = [
+            '🦊', '🦋', '🐱', '🐶', '🐼', '🐨', '🦁', '🐯', '🐻', '🐰',
+            '🦄', '🐲', '🦅', '🦉', '🐺', '🦈', '🐬', '🦩', '🦚', '🐢',
+            '🧙‍♂️', '🧙‍♀️', '🦸‍♂️', '🦸‍♀️', '🧚‍♀️', '🧜‍♀️', '🧝‍♀️', '🧛‍♂️', '🥷', '👸',
+            '🤴', '🎅', '🧑‍🚀', '🧑‍🎨', '🧑‍🔬', '🧑‍💻', '🧑‍🎤', '🧑‍🍳', '🧑‍🌾', '🧑‍⚕️',
+            '😎', '🤓', '🥳', '😇', '🤩', '🥰', '😊', '🌟', '⭐', '💫',
+            '🌈', '🔥', '💎', '🎯', '🏆', '🎪', '🎭', '🎨', '🎬', '🎮'
+        ];
+
+        function calculateUserXP(userId) {
+            let totalXP = 0;
+            const userHabits = data.habits.filter(h => h.owner === userId || h.owner === 'shared');
+            
+            Object.keys(data.entries).forEach(dateStr => {
+                const dayData = data.entries[dateStr];
+                userHabits.forEach(habit => {
+                    const value = dayData[habit.id];
+                    if (habit.type === 'binary' && value === true) {
+                        totalXP += 10; // 10 XP per completed binary habit
+                    } else if (habit.type === 'numeric' && typeof value === 'number' && value > 0) {
+                        totalXP += Math.min(value, 20); // Up to 20 XP for numeric
+                    }
+                });
+            });
+            
+            return totalXP;
+        }
+
+        function calculateLevel(xp) {
+            // Level formula: each level requires level * 100 XP
+            // Level 1: 0-99, Level 2: 100-299, Level 3: 300-599, etc.
+            let level = 1;
+            let xpRequired = 100;
+            let totalRequired = 0;
+            
+            while (xp >= totalRequired + xpRequired) {
+                totalRequired += xpRequired;
+                level++;
+                xpRequired = level * 100;
+            }
+            
+            const xpInCurrentLevel = xp - totalRequired;
+            const xpForNextLevel = xpRequired;
+            
+            return { level, xpInCurrentLevel, xpForNextLevel, totalXP: xp };
+        }
+
+        function updateUserCards() {
+            ['A', 'B'].forEach(userId => {
+                const profile = profiles[userId];
+                const xp = calculateUserXP(userId);
+                const levelInfo = calculateLevel(xp);
+                
+                // Update profile data
+                profiles[userId].xp = xp;
+                profiles[userId].level = levelInfo.level;
+                
+                // Update card UI
+                document.getElementById(`user${userId}Avatar`).textContent = profile.avatar;
+                document.getElementById(`user${userId}Name`).textContent = profile.name;
+                document.getElementById(`user${userId}Level`).textContent = `Ур. ${levelInfo.level}`;
+                document.getElementById(`user${userId}XpText`).textContent = 
+                    `${levelInfo.xpInCurrentLevel} / ${levelInfo.xpForNextLevel} XP`;
+            });
+            
+            saveProfiles(profiles);
+        }
+
+        function calculateUserStats(userId) {
+            const userHabits = data.habits.filter(h => h.owner === userId || h.owner === 'shared');
+            const now = new Date();
+            
+            let totalCompletions = 0;
+            let activeDays = new Set();
+            let currentStreak = 0;
+            
+            // Count completions
+            Object.keys(data.entries).forEach(dateStr => {
+                const dayData = data.entries[dateStr];
+                let dayHasActivity = false;
+                
+                userHabits.forEach(habit => {
+                    const value = dayData[habit.id];
+                    if (value === true || (typeof value === 'number' && value > 0)) {
+                        totalCompletions++;
+                        dayHasActivity = true;
+                    }
+                });
+                
+                if (dayHasActivity) {
+                    activeDays.add(dateStr);
+                }
+            });
+            
+            // Calculate current streak
+            for (let i = 0; i <= 365; i++) {
+                const date = new Date(now);
+                date.setDate(now.getDate() - i);
+                const dateStr = formatDate(date);
+                
+                if (activeDays.has(dateStr)) {
+                    currentStreak++;
+                } else if (i > 0) {
+                    break;
+                }
+            }
+            
+            return {
+                completions: totalCompletions,
+                activeDays: activeDays.size,
+                streak: currentStreak
+            };
+        }
+
+        function showProfile(userId) {
+            currentProfileUser = userId;
+            const profile = profiles[userId];
+            const stats = calculateUserStats(userId);
+            const levelInfo = calculateLevel(profiles[userId].xp);
+            
+            // Update header
+            const header = document.getElementById('profileHeader');
+            const levelBadge = document.getElementById('profileLevelBadge');
+            const avatar = document.getElementById('profileAvatar');
+            
+            if (userId === 'B') {
+                header.classList.add('user-b');
+                levelBadge.classList.add('user-b');
+                avatar.classList.add('user-b');
+            } else {
+                header.classList.remove('user-b');
+                levelBadge.classList.remove('user-b');
+                avatar.classList.remove('user-b');
+            }
+            
+            // Update profile data
+            document.getElementById('profileAvatar').textContent = profile.avatar;
+            document.getElementById('profileName').textContent = profile.name;
+            document.getElementById('profileTitle').textContent = profile.title;
+            document.getElementById('profileLevelBadge').textContent = `Уровень ${levelInfo.level}`;
+            
+            // XP bar
+            document.getElementById('profileXpValue').textContent = 
+                `${levelInfo.xpInCurrentLevel} / ${levelInfo.xpForNextLevel} XP`;
+            document.getElementById('profileXpFill').style.width = 
+                `${(levelInfo.xpInCurrentLevel / levelInfo.xpForNextLevel) * 100}%`;
+            
+            // Stats
+            document.getElementById('profileStreak').textContent = stats.streak;
+            document.getElementById('profileCompleted').textContent = stats.completions;
+            document.getElementById('profileDays').textContent = stats.activeDays;
+            
+            // Superpower
+            document.getElementById('superpowerIcon').textContent = profile.superpowerIcon;
+            document.getElementById('superpowerName').textContent = profile.superpowerName;
+            document.getElementById('superpowerDesc').textContent = profile.superpowerDesc;
+            
+            // Traits
+            const traitsContainer = document.getElementById('profileTraits');
+            traitsContainer.innerHTML = profile.traits.map(t => 
+                `<span class="profile-trait">${t}</span>`
+            ).join('');
+            
+            // Bio
+            document.getElementById('profileBio').textContent = profile.bio;
+            
+            // Reset to view mode
+            toggleProfileEdit(false);
+            
+            // Show modal
+            document.getElementById('profileOverlay').classList.add('active');
+        }
+
+        function toggleProfileEdit(editMode) {
+            const viewMode = document.getElementById('profileViewMode');
+            const editModeEl = document.getElementById('profileEditMode');
+            
+            if (editMode) {
+                const profile = profiles[currentProfileUser];
+                
+                // Fill form
+                document.getElementById('editName').value = profile.name;
+                document.getElementById('editTitle').value = profile.title;
+                document.getElementById('editSuperpowerIcon').value = profile.superpowerIcon;
+                document.getElementById('editSuperpowerName').value = profile.superpowerName;
+                document.getElementById('editSuperpowerDesc').value = profile.superpowerDesc;
+                document.getElementById('editTraits').value = profile.traits.join(', ');
+                document.getElementById('editBio').value = profile.bio;
+                
+                viewMode.style.display = 'none';
+                editModeEl.classList.add('active');
+            } else {
+                viewMode.style.display = 'block';
+                editModeEl.classList.remove('active');
+            }
+        }
+
+        function saveProfile() {
+            const profile = profiles[currentProfileUser];
+            
+            profile.name = document.getElementById('editName').value.trim() || profile.name;
+            profile.title = document.getElementById('editTitle').value.trim() || 'Начинающий герой';
+            profile.superpowerIcon = document.getElementById('editSuperpowerIcon').value.trim() || '🌟';
+            profile.superpowerName = document.getElementById('editSuperpowerName').value.trim() || 'Не задана';
+            profile.superpowerDesc = document.getElementById('editSuperpowerDesc').value.trim() || 'Добавь описание своей суперсилы!';
+            
+            const traitsStr = document.getElementById('editTraits').value;
+            profile.traits = traitsStr.split(',').map(t => t.trim()).filter(t => t.length > 0);
+            if (profile.traits.length === 0) profile.traits = ['Целеустремлённость'];
+            
+            profile.bio = document.getElementById('editBio').value.trim() || 'Расскажи о себе...';
+            
+            saveProfiles(profiles);
+            updateUserCards();
+            showProfile(currentProfileUser);
+        }
+
+        function openEmojiPicker() {
+            const grid = document.getElementById('emojiGrid');
+            grid.innerHTML = avatarEmojis.map(emoji => 
+                `<button class="emoji-option" onclick="selectAvatar('${emoji}')">${emoji}</button>`
+            ).join('');
+            
+            document.getElementById('emojiPickerOverlay').classList.add('active');
+        }
+
+        function selectAvatar(emoji) {
+            profiles[currentProfileUser].avatar = emoji;
+            saveProfiles(profiles);
+            
+            document.getElementById('profileAvatar').textContent = emoji;
+            document.getElementById(`user${currentProfileUser}Avatar`).textContent = emoji;
+            
+            document.getElementById('emojiPickerOverlay').classList.remove('active');
+        }
+
+        // Close profile modal
+        document.getElementById('profileClose').addEventListener('click', () => {
+            document.getElementById('profileOverlay').classList.remove('active');
+        });
+
+        document.getElementById('profileOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'profileOverlay') {
+                document.getElementById('profileOverlay').classList.remove('active');
+            }
+        });
+
+        // Close emoji picker
+        document.getElementById('emojiPickerOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'emojiPickerOverlay') {
+                document.getElementById('emojiPickerOverlay').classList.remove('active');
+            }
+        });
+
         // ============ PWA / SERVICE WORKER ============
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -3298,6 +4288,7 @@
             // Apply saved theme
             applyTheme(settings.theme);
             updatePauseModeUI();
+            updateUserCards();
             
             renderCalendar();
             renderHabits();
