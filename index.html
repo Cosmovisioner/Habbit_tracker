@@ -2150,6 +2150,600 @@
         body.light-theme .global-progress-hint {
             color: #64748b;
         }
+
+        /* ============ ACHIEVEMENTS SYSTEM ============ */
+        .achievements-section {
+            margin-top: 20px;
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .achievement-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .achievement-item.locked {
+            opacity: 0.4;
+            filter: grayscale(1);
+        }
+
+        .achievement-item.unlocked {
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.1) 0%, rgba(192, 132, 252, 0.1) 100%);
+            border-color: rgba(244, 114, 182, 0.3);
+        }
+
+        .achievement-item.unlocked:hover {
+            transform: scale(1.05);
+            border-color: rgba(244, 114, 182, 0.6);
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.3);
+        }
+
+        .achievement-item.new {
+            animation: achievementPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes achievementPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(244, 114, 182, 0.4); }
+            50% { box-shadow: 0 0 20px 5px rgba(244, 114, 182, 0.6); }
+        }
+
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 6px;
+        }
+
+        .achievement-name {
+            font-size: 0.7rem;
+            text-align: center;
+            color: #94a3b8;
+            line-height: 1.2;
+        }
+
+        .achievement-item.unlocked .achievement-name {
+            color: #e2e8f0;
+        }
+
+        .achievement-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 15, 26, 0.95);
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            border-radius: 8px;
+            padding: 10px 12px;
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .achievement-item:hover .achievement-tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .achievement-tooltip-title {
+            font-weight: 600;
+            color: #f472b6;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .achievement-tooltip-desc {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .achievement-tooltip-date {
+            font-size: 0.7rem;
+            color: #64748b;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* ============ STREAK FIRE BADGES ============ */
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .streak-badge.bronze {
+            background: linear-gradient(135deg, #cd7f32 0%, #8b4513 100%);
+            color: white;
+        }
+
+        .streak-badge.silver {
+            background: linear-gradient(135deg, #c0c0c0 0%, #808080 100%);
+            color: #1a1a2e;
+        }
+
+        .streak-badge.gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+            color: #1a1a2e;
+            animation: goldGlow 2s ease-in-out infinite;
+        }
+
+        .streak-badge.diamond {
+            background: linear-gradient(135deg, #b9f2ff 0%, #00bfff 50%, #87ceeb 100%);
+            color: #1a1a2e;
+            animation: diamondSparkle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes goldGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        }
+
+        @keyframes diamondSparkle {
+            0%, 100% { box-shadow: 0 0 10px rgba(0, 191, 255, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(0, 191, 255, 0.9); }
+        }
+
+        .habit-streak-indicator {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+
+        .habit-streak-indicator.fire-bronze { color: #cd7f32; }
+        .habit-streak-indicator.fire-silver { color: #c0c0c0; }
+        .habit-streak-indicator.fire-gold { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); }
+        .habit-streak-indicator.fire-diamond { color: #00bfff; text-shadow: 0 0 8px rgba(0, 191, 255, 0.5); }
+
+        /* ============ CONFETTI ANIMATION ============ */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(-100%) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* ============ LEVEL UP ANIMATION ============ */
+        .level-up-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .level-up-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .level-up-content {
+            text-align: center;
+            animation: levelUpBounce 0.6s ease-out;
+        }
+
+        @keyframes levelUpBounce {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .level-up-icon {
+            font-size: 5rem;
+            animation: levelUpSpin 1s ease-out;
+        }
+
+        @keyframes levelUpSpin {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        .level-up-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 16px 0;
+        }
+
+        .level-up-level {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #ffd700;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+
+        /* ============ ACHIEVEMENT UNLOCK POPUP ============ */
+        .achievement-popup {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, rgba(15, 15, 26, 0.95) 0%, rgba(26, 26, 46, 0.95) 100%);
+            border: 2px solid rgba(244, 114, 182, 0.5);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 10px 40px rgba(244, 114, 182, 0.3);
+            z-index: 9998;
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .achievement-popup.show {
+            transform: translateX(0);
+        }
+
+        .achievement-popup-icon {
+            font-size: 2.5rem;
+            animation: achievementBounce 0.6s ease-out;
+        }
+
+        @keyframes achievementBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .achievement-popup-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .achievement-popup-label {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .achievement-popup-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f472b6;
+        }
+
+        /* ============ INLINE EDITING ============ */
+        .inline-editable {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .inline-editable:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .inline-editable::after {
+            content: '✎';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: #64748b;
+        }
+
+        .inline-editable:hover::after {
+            opacity: 1;
+        }
+
+        .inline-editable.editing {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 0;
+        }
+
+        .inline-editable.editing::after {
+            display: none;
+        }
+
+        .inline-edit-input {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font: inherit;
+            width: 100%;
+            padding: 4px 8px;
+            outline: none;
+            border-radius: 6px;
+        }
+
+        .inline-edit-input:focus {
+            box-shadow: 0 0 0 2px rgba(244, 114, 182, 0.5);
+        }
+
+        .inline-edit-textarea {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font: inherit;
+            width: 100%;
+            padding: 8px;
+            outline: none;
+            border-radius: 6px;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .inline-edit-textarea:focus {
+            box-shadow: 0 0 0 2px rgba(244, 114, 182, 0.5);
+        }
+
+        .profile-name.inline-editable::after,
+        .profile-title.inline-editable::after {
+            right: -25px;
+        }
+
+        /* Traits inline editing */
+        .profile-traits.editable {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .profile-traits.editable:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .traits-edit-hint {
+            display: none;
+            font-size: 0.75rem;
+            color: #64748b;
+            margin-top: 6px;
+        }
+
+        .profile-traits.editable:hover .traits-edit-hint {
+            display: block;
+        }
+
+        /* ============ SOUND TOGGLE ============ */
+        .sound-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .sound-toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+        }
+
+        .sound-toggle:hover .sound-toggle-icon {
+            transform: scale(1.1);
+        }
+
+        /* ============ JOINT CHALLENGES ============ */
+        .challenges-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .challenges-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .challenges-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .challenge-item {
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.1) 0%, rgba(192, 132, 252, 0.1) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(244, 114, 182, 0.2);
+        }
+
+        .challenge-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .challenge-name {
+            font-weight: 600;
+            color: #f472b6;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .challenge-progress-container {
+            margin: 12px 0;
+        }
+
+        .challenge-progress-bar {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .challenge-progress-a {
+            height: 100%;
+            background: linear-gradient(90deg, #ec4899 0%, #f472b6 100%);
+            transition: width 0.5s ease;
+        }
+
+        .challenge-progress-b {
+            height: 100%;
+            background: linear-gradient(90deg, #a855f7 0%, #c084fc 100%);
+            transition: width 0.5s ease;
+        }
+
+        .challenge-progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        .challenge-deadline {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .add-challenge-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .add-challenge-btn:hover {
+            border-color: rgba(244, 114, 182, 0.5);
+            background: rgba(244, 114, 182, 0.1);
+            color: #f472b6;
+        }
+
+        /* Challenge Form */
+        .challenge-form {
+            display: none;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+
+        .challenge-form.active {
+            display: block;
+        }
+
+        .challenge-form .form-group {
+            margin-bottom: 12px;
+        }
+
+        .challenge-form label {
+            display: block;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .challenge-form input,
+        .challenge-form select {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .challenge-form-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        /* Light theme adjustments */
+        body.light-theme .achievement-item {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .achievement-item.unlocked {
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.15) 0%, rgba(192, 132, 252, 0.15) 100%);
+        }
+
+        body.light-theme .achievement-tooltip {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(244, 114, 182, 0.3);
+        }
+
+        body.light-theme .achievement-tooltip-desc {
+            color: #64748b;
+        }
+
+        body.light-theme .inline-editable:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .challenge-item {
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.08) 0%, rgba(192, 132, 252, 0.08) 100%);
+        }
+
+        body.light-theme .challenges-section {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -2284,6 +2878,37 @@
             </div>
         </div>
 
+        <!-- Joint Challenges Section -->
+        <div class="challenges-section" id="challengesSection">
+            <div class="challenges-header">
+                <div class="challenges-title">🤝 Совместные челленджи</div>
+            </div>
+            <div id="challengesList"></div>
+            <button class="add-challenge-btn" id="addChallengeBtn">+ Создать челлендж</button>
+            <div class="challenge-form" id="challengeForm">
+                <div class="form-group">
+                    <label>Название челленджа</label>
+                    <input type="text" id="challengeName" placeholder="Например: 100км вместе">
+                </div>
+                <div class="form-group">
+                    <label>Цель (число)</label>
+                    <input type="number" id="challengeGoal" placeholder="100" min="1">
+                </div>
+                <div class="form-group">
+                    <label>Единица измерения</label>
+                    <input type="text" id="challengeUnit" placeholder="км, раз, минут...">
+                </div>
+                <div class="form-group">
+                    <label>Длительность (дней)</label>
+                    <input type="number" id="challengeDuration" placeholder="30" min="1">
+                </div>
+                <div class="challenge-form-actions">
+                    <button class="btn btn-secondary" id="cancelChallenge">Отмена</button>
+                    <button class="btn btn-primary" id="saveChallenge">Создать</button>
+                </div>
+            </div>
+        </div>
+
         <div class="user-progress">
             <div class="user-progress-card" data-user="A" id="userCardA" onclick="switchUserView('A')">
                 <div class="user-card-header">
@@ -2389,6 +3014,19 @@
             </div>
             
             <div class="settings-section">
+                <h4>🔊 Звуки</h4>
+                <div class="settings-row">
+                    <label>Звуковые эффекты</label>
+                    <div class="sound-toggle" onclick="toggleSound()">
+                        <span class="sound-toggle-icon" id="soundToggle">🔊</span>
+                    </div>
+                </div>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 8px;">
+                    Звуки при выполнении привычек, повышении уровня и получении достижений
+                </p>
+            </div>
+            
+            <div class="settings-section">
                 <h4>🗑️ Опасная зона</h4>
                 <div class="settings-buttons">
                     <button class="btn btn-secondary" id="resetProgressBtn" style="color: #f87171;">Сбросить прогресс</button>
@@ -2427,8 +3065,8 @@
                     🦊
                     <div class="profile-avatar-edit">✎</div>
                 </div>
-                <div class="profile-name" id="profileName">Димочка</div>
-                <div class="profile-title" id="profileTitle">Начинающий герой</div>
+                <div class="profile-name inline-editable" id="profileName" onclick="startInlineEdit(this, 'name')" title="Нажми чтобы изменить">Димочка</div>
+                <div class="profile-title inline-editable" id="profileTitle" onclick="startInlineEdit(this, 'title')" title="Нажми чтобы изменить">Начинающий герой</div>
                 <div class="profile-level-badge" id="profileLevelBadge">Уровень 1</div>
             </div>
             
@@ -2463,70 +3101,44 @@
                     </div>
                 </div>
                 
-                <!-- View Mode -->
+                <!-- Inline Editable Profile -->
                 <div id="profileViewMode">
                     <!-- Superpower -->
                     <div class="profile-section">
                         <div class="profile-section-title">⚡ Суперсила</div>
                         <div class="profile-superpower" id="profileSuperpower">
-                            <div class="profile-superpower-icon" id="superpowerIcon">🌟</div>
-                            <div class="profile-superpower-name" id="superpowerName">Не задана</div>
-                            <div class="profile-superpower-desc" id="superpowerDesc">Нажми "Редактировать" чтобы добавить свою суперсилу!</div>
+                            <div class="profile-superpower-icon inline-editable" id="superpowerIcon" onclick="startInlineEdit(this, 'superpowerIcon')" title="Нажми чтобы изменить">🌟</div>
+                            <div class="profile-superpower-name inline-editable" id="superpowerName" onclick="startInlineEdit(this, 'superpowerName')" title="Нажми чтобы изменить">Не задана</div>
+                            <div class="profile-superpower-desc inline-editable" id="superpowerDesc" onclick="startInlineEdit(this, 'superpowerDesc')" title="Нажми чтобы изменить">Добавь описание своей суперсилы!</div>
                         </div>
                     </div>
                     
                     <!-- Traits -->
                     <div class="profile-section">
                         <div class="profile-section-title">🏷️ Черты характера</div>
-                        <div class="profile-traits" id="profileTraits">
+                        <div class="profile-traits editable" id="profileTraits" onclick="startTraitsEdit()" title="Нажми чтобы изменить">
                             <span class="profile-trait">Целеустремлённость</span>
+                            <div class="traits-edit-hint">Нажми чтобы редактировать</div>
+                        </div>
+                        <div class="profile-traits-edit" id="profileTraitsEdit" style="display: none;">
+                            <input type="text" id="editTraitsInput" class="inline-edit-input" placeholder="Через запятую: Упорство, Позитив...">
                         </div>
                     </div>
                     
                     <!-- Bio -->
                     <div class="profile-section">
                         <div class="profile-section-title">📝 О себе</div>
-                        <div class="profile-bio" id="profileBio">
+                        <div class="profile-bio inline-editable" id="profileBio" onclick="startInlineEdit(this, 'bio', true)" title="Нажми чтобы изменить">
                             Расскажи о себе...
                         </div>
                     </div>
                     
-                    <button class="profile-edit-btn" onclick="toggleProfileEdit(true)">✎ Редактировать профиль</button>
-                </div>
-                
-                <!-- Edit Mode -->
-                <div class="profile-edit-form" id="profileEditMode">
-                    <div class="profile-field">
-                        <label>Имя</label>
-                        <input type="text" id="editName" placeholder="Твоё имя">
-                    </div>
-                    <div class="profile-field">
-                        <label>Титул</label>
-                        <input type="text" id="editTitle" placeholder="Начинающий герой, Мастер привычек...">
-                    </div>
-                    <div class="profile-field">
-                        <label>⚡ Суперсила (эмодзи)</label>
-                        <input type="text" id="editSuperpowerIcon" placeholder="🌟, ⚡, 🔥..." maxlength="2">
-                    </div>
-                    <div class="profile-field">
-                        <label>⚡ Название суперсилы</label>
-                        <input type="text" id="editSuperpowerName" placeholder="Несокрушимая воля">
-                    </div>
-                    <div class="profile-field">
-                        <label>⚡ Описание суперсилы</label>
-                        <input type="text" id="editSuperpowerDesc" placeholder="Могу превратить любую задачу в привычку">
-                    </div>
-                    <div class="profile-field">
-                        <label>🏷️ Черты характера (через запятую)</label>
-                        <input type="text" id="editTraits" placeholder="Целеустремлённость, Упорство, Позитив">
-                    </div>
-                    <div class="profile-field">
-                        <label>📝 О себе</label>
-                        <textarea id="editBio" placeholder="Расскажи о себе, своих целях и мечтах..."></textarea>
-                    </div>
-                    <div class="profile-edit-actions">
-                        <button class="btn btn-secondary" onclick="toggleProfileEdit(false)">Отмена</button>
-                        <button class="btn btn-primary" onclick="saveProfile()">Сохранить</button>
+                    <!-- Achievements Section (NOT editable) -->
+                    <div class="profile-section achievements-section">
+                        <div class="profile-section-title">🏆 Достижения</div>
+                        <div class="achievements-grid" id="achievementsGrid">
+                            <!-- Achievements will be rendered here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2540,6 +3152,27 @@
             <div class="emoji-grid" id="emojiGrid"></div>
         </div>
     </div>
+
+    <!-- Level Up Overlay -->
+    <div class="level-up-overlay" id="levelUpOverlay" onclick="closeLevelUp()">
+        <div class="level-up-content">
+            <div class="level-up-icon">🎉</div>
+            <div class="level-up-text">Новый уровень!</div>
+            <div class="level-up-level" id="levelUpLevel">2</div>
+        </div>
+    </div>
+
+    <!-- Achievement Popup -->
+    <div class="achievement-popup" id="achievementPopup">
+        <div class="achievement-popup-icon" id="achievementPopupIcon">🏆</div>
+        <div class="achievement-popup-content">
+            <div class="achievement-popup-label">Достижение разблокировано!</div>
+            <div class="achievement-popup-title" id="achievementPopupTitle">Первые шаги</div>
+        </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confettiContainer"></div>
 
     <script>
         // ============ DATA LAYER ============
@@ -2640,20 +3273,568 @@
             localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
         }
 
+        // Achievements & Challenges Storage
+        const ACHIEVEMENTS_KEY = 'habit_tracker_achievements';
+        const CHALLENGES_KEY = 'habit_tracker_challenges';
+
+        const defaultAchievements = {
+            A: {},  // { achievementId: { unlockedAt: 'date', seen: false } }
+            B: {}
+        };
+
+        const defaultChallenges = [];
+
+        function loadAchievements() {
+            const stored = localStorage.getItem(ACHIEVEMENTS_KEY);
+            if (stored) {
+                try {
+                    return { ...defaultAchievements, ...JSON.parse(stored) };
+                } catch (e) {
+                    console.error('Error parsing achievements:', e);
+                }
+            }
+            return JSON.parse(JSON.stringify(defaultAchievements));
+        }
+
+        function saveAchievements(achievements) {
+            localStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+        }
+
+        function loadChallenges() {
+            const stored = localStorage.getItem(CHALLENGES_KEY);
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    console.error('Error parsing challenges:', e);
+                }
+            }
+            return [...defaultChallenges];
+        }
+
+        function saveChallenges(challenges) {
+            localStorage.setItem(CHALLENGES_KEY, JSON.stringify(challenges));
+        }
+
         function generateId() {
             return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // ============ ACHIEVEMENTS DEFINITIONS ============
+        const ACHIEVEMENTS = [
+            { id: 'first_habit', icon: '🌱', name: 'Первые шаги', desc: 'Создай первую привычку', check: (userId) => data.habits.filter(h => h.owner === userId || h.owner === 'shared').length >= 1 },
+            { id: 'five_habits', icon: '🌿', name: 'Коллекционер', desc: 'Создай 5 привычек', check: (userId) => data.habits.filter(h => h.owner === userId || h.owner === 'shared').length >= 5 },
+            { id: 'ten_habits', icon: '🌳', name: 'Садовник', desc: 'Создай 10 привычек', check: (userId) => data.habits.filter(h => h.owner === userId || h.owner === 'shared').length >= 10 },
+            { id: 'first_complete', icon: '✅', name: 'Начало положено', desc: 'Выполни привычку первый раз', check: (userId) => calculateUserStats(userId).completions >= 1 },
+            { id: 'ten_completions', icon: '🎯', name: 'На верном пути', desc: 'Выполни 10 привычек', check: (userId) => calculateUserStats(userId).completions >= 10 },
+            { id: 'fifty_completions', icon: '💪', name: 'Настойчивость', desc: 'Выполни 50 привычек', check: (userId) => calculateUserStats(userId).completions >= 50 },
+            { id: 'hundred_completions', icon: '🏆', name: 'Чемпион', desc: 'Выполни 100 привычек', check: (userId) => calculateUserStats(userId).completions >= 100 },
+            { id: 'streak_3', icon: '🔥', name: 'Разогрев', desc: 'Серия 3 дня подряд', check: (userId) => calculateUserStats(userId).streak >= 3 },
+            { id: 'streak_7', icon: '🔥', name: 'Огненная неделя', desc: 'Серия 7 дней подряд', check: (userId) => calculateUserStats(userId).streak >= 7 },
+            { id: 'streak_14', icon: '🔥', name: 'Две недели силы', desc: 'Серия 14 дней подряд', check: (userId) => calculateUserStats(userId).streak >= 14 },
+            { id: 'streak_30', icon: '💎', name: 'Марафонец', desc: 'Серия 30 дней подряд', check: (userId) => calculateUserStats(userId).streak >= 30 },
+            { id: 'streak_100', icon: '👑', name: 'Легенда', desc: 'Серия 100 дней подряд', check: (userId) => calculateUserStats(userId).streak >= 100 },
+            { id: 'level_5', icon: '⭐', name: 'Ученик', desc: 'Достигни 5 уровня', check: (userId) => calculateLevel(calculateUserXP(userId)).level >= 5 },
+            { id: 'level_10', icon: '🌟', name: 'Мастер', desc: 'Достигни 10 уровня', check: (userId) => calculateLevel(calculateUserXP(userId)).level >= 10 },
+            { id: 'level_25', icon: '💫', name: 'Грандмастер', desc: 'Достигни 25 уровня', check: (userId) => calculateLevel(calculateUserXP(userId)).level >= 25 },
+            { id: 'active_7', icon: '📅', name: 'Активная неделя', desc: '7 активных дней', check: (userId) => calculateUserStats(userId).activeDays >= 7 },
+            { id: 'active_30', icon: '📆', name: 'Активный месяц', desc: '30 активных дней', check: (userId) => calculateUserStats(userId).activeDays >= 30 },
+            { id: 'shared_habit', icon: '💕', name: 'Командная работа', desc: 'Создай общую привычку', check: (userId) => data.habits.some(h => h.owner === 'shared') },
+            { id: 'profile_complete', icon: '🎭', name: 'Индивидуальность', desc: 'Заполни профиль полностью', check: (userId) => {
+                const p = profiles[userId];
+                return p.name !== 'Димочка' && p.name !== 'Дашенька' || p.superpowerName !== 'Не задана' && p.bio !== 'Расскажи о себе...';
+            }},
+            { id: 'early_bird', icon: '🌅', name: 'Ранняя пташка', desc: 'Выполни привычку до 7:00', check: () => false }, // Special - tracked separately
+            { id: 'night_owl', icon: '🦉', name: 'Полуночник', desc: 'Выполни привычку после 23:00', check: () => false }, // Special - tracked separately
+        ];
+
+        // ============ SOUND SYSTEM ============
+        let soundEnabled = localStorage.getItem('habit_tracker_sound') !== 'false';
+        
+        const sounds = {
+            complete: null,
+            levelUp: null,
+            achievement: null
+        };
+
+        // Create audio context for sound effects
+        function playSound(type) {
+            if (!soundEnabled) return;
+            
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            if (type === 'complete') {
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } else if (type === 'levelUp') {
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.15);
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.3);
+                oscillator.frequency.setValueAtTime(1046.50, audioContext.currentTime + 0.45);
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.7);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.7);
+            } else if (type === 'achievement') {
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(987.77, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(1174.66, audioContext.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            localStorage.setItem('habit_tracker_sound', soundEnabled);
+            updateSoundToggleUI();
+        }
+
+        function updateSoundToggleUI() {
+            const toggle = document.getElementById('soundToggle');
+            if (toggle) {
+                toggle.innerHTML = soundEnabled ? '🔊' : '🔇';
+            }
         }
 
         // ============ STATE ============
         let data = loadData();
         let settings = loadSettings();
         let profiles = loadProfiles();
+        let achievements = loadAchievements();
+        let challenges = loadChallenges();
         let selectedDate = new Date();
         let currentMonth = new Date();
         let userFilter = 'all';
         let categoryFilter = 'all';
         let currentAnalyticsTab = 'weekly';
         let currentProfileUser = 'A';
+        let previousLevels = { A: calculateLevel(calculateUserXP('A')).level, B: calculateLevel(calculateUserXP('B')).level };
+
+        // ============ CONFETTI ANIMATION ============
+        function createConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#f472b6', '#c084fc', '#818cf8', '#fbbf24', '#34d399', '#60a5fa'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
+                
+                if (Math.random() > 0.5) {
+                    confetti.style.borderRadius = '50%';
+                }
+                
+                container.appendChild(confetti);
+            }
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // ============ LEVEL UP SYSTEM ============
+        function checkLevelUp(userId) {
+            const currentLevel = calculateLevel(calculateUserXP(userId)).level;
+            const previousLevel = previousLevels[userId];
+            
+            if (currentLevel > previousLevel) {
+                previousLevels[userId] = currentLevel;
+                showLevelUp(currentLevel);
+                return true;
+            }
+            return false;
+        }
+
+        function showLevelUp(level) {
+            playSound('levelUp');
+            createConfetti();
+            
+            document.getElementById('levelUpLevel').textContent = level;
+            document.getElementById('levelUpOverlay').classList.add('active');
+            
+            setTimeout(() => {
+                closeLevelUp();
+            }, 3000);
+        }
+
+        function closeLevelUp() {
+            document.getElementById('levelUpOverlay').classList.remove('active');
+        }
+
+        // ============ ACHIEVEMENTS SYSTEM ============
+        function checkAchievements(userId) {
+            const userAchievements = achievements[userId] || {};
+            const newUnlocks = [];
+            
+            ACHIEVEMENTS.forEach(ach => {
+                if (!userAchievements[ach.id] && ach.check(userId)) {
+                    userAchievements[ach.id] = {
+                        unlockedAt: new Date().toISOString(),
+                        seen: false
+                    };
+                    newUnlocks.push(ach);
+                }
+            });
+            
+            if (newUnlocks.length > 0) {
+                achievements[userId] = userAchievements;
+                saveAchievements(achievements);
+                
+                // Show popup for first new achievement
+                showAchievementPopup(newUnlocks[0]);
+            }
+        }
+
+        function showAchievementPopup(achievement) {
+            playSound('achievement');
+            
+            document.getElementById('achievementPopupIcon').textContent = achievement.icon;
+            document.getElementById('achievementPopupTitle').textContent = achievement.name;
+            
+            const popup = document.getElementById('achievementPopup');
+            popup.classList.add('show');
+            
+            setTimeout(() => {
+                popup.classList.remove('show');
+            }, 4000);
+        }
+
+        function renderAchievements(userId) {
+            const grid = document.getElementById('achievementsGrid');
+            if (!grid) return;
+            
+            const userAchievements = achievements[userId] || {};
+            
+            grid.innerHTML = ACHIEVEMENTS.map(ach => {
+                const unlocked = userAchievements[ach.id];
+                const isNew = unlocked && !unlocked.seen;
+                const unlockedDate = unlocked ? new Date(unlocked.unlockedAt).toLocaleDateString('ru-RU') : null;
+                
+                // Mark as seen
+                if (isNew) {
+                    achievements[userId][ach.id].seen = true;
+                    saveAchievements(achievements);
+                }
+                
+                return `
+                    <div class="achievement-item ${unlocked ? 'unlocked' : 'locked'} ${isNew ? 'new' : ''}">
+                        <div class="achievement-icon">${ach.icon}</div>
+                        <div class="achievement-name">${ach.name}</div>
+                        <div class="achievement-tooltip">
+                            <div class="achievement-tooltip-title">${ach.name}</div>
+                            <div class="achievement-tooltip-desc">${ach.desc}</div>
+                            ${unlockedDate ? `<div class="achievement-tooltip-date">Получено: ${unlockedDate}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============ STREAK BADGES ============
+        function getStreakBadge(streak) {
+            if (streak >= 100) return { class: 'diamond', icon: '💎', text: streak };
+            if (streak >= 30) return { class: 'gold', icon: '🔥', text: streak };
+            if (streak >= 7) return { class: 'silver', icon: '🔥', text: streak };
+            if (streak >= 3) return { class: 'bronze', icon: '🔥', text: streak };
+            return null;
+        }
+
+        function getHabitStreak(habitId) {
+            const now = new Date();
+            let streak = 0;
+            
+            for (let i = 0; i <= 365; i++) {
+                const date = new Date(now);
+                date.setDate(now.getDate() - i);
+                const dateStr = formatDate(date);
+                const entry = data.entries[dateStr]?.[habitId];
+                
+                if (entry === true || (typeof entry === 'number' && entry > 0)) {
+                    streak++;
+                } else if (i > 0) {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+
+        function getStreakFireClass(streak) {
+            if (streak >= 100) return 'fire-diamond';
+            if (streak >= 30) return 'fire-gold';
+            if (streak >= 7) return 'fire-silver';
+            if (streak >= 3) return 'fire-bronze';
+            return '';
+        }
+
+        // ============ INLINE EDITING ============
+        function startInlineEdit(element, field, isTextarea = false) {
+            if (element.classList.contains('editing')) return;
+            
+            const currentValue = element.textContent.trim();
+            element.classList.add('editing');
+            
+            if (isTextarea) {
+                element.innerHTML = `<textarea class="inline-edit-textarea" onblur="finishInlineEdit(this, '${field}')" onkeydown="handleInlineKeydown(event, this, '${field}')">${currentValue}</textarea>`;
+            } else {
+                element.innerHTML = `<input type="text" class="inline-edit-input" value="${currentValue}" onblur="finishInlineEdit(this, '${field}')" onkeydown="handleInlineKeydown(event, this, '${field}')">`;
+            }
+            
+            const input = element.querySelector('input, textarea');
+            input.focus();
+            input.select();
+        }
+
+        function handleInlineKeydown(event, input, field) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                input.blur();
+            }
+            if (event.key === 'Escape') {
+                // Cancel edit
+                showProfile(currentProfileUser);
+            }
+        }
+
+        function finishInlineEdit(input, field) {
+            const newValue = input.value.trim();
+            const profile = profiles[currentProfileUser];
+            
+            switch (field) {
+                case 'name':
+                    profile.name = newValue || profile.name;
+                    break;
+                case 'title':
+                    profile.title = newValue || 'Начинающий герой';
+                    break;
+                case 'superpowerIcon':
+                    profile.superpowerIcon = newValue || '🌟';
+                    break;
+                case 'superpowerName':
+                    profile.superpowerName = newValue || 'Не задана';
+                    break;
+                case 'superpowerDesc':
+                    profile.superpowerDesc = newValue || 'Добавь описание!';
+                    break;
+                case 'bio':
+                    profile.bio = newValue || 'Расскажи о себе...';
+                    break;
+            }
+            
+            saveProfiles(profiles);
+            updateUserCards();
+            showProfile(currentProfileUser);
+            
+            // Check profile achievement
+            checkAchievements(currentProfileUser);
+        }
+
+        function startTraitsEdit() {
+            const traitsDiv = document.getElementById('profileTraits');
+            const traitsEditDiv = document.getElementById('profileTraitsEdit');
+            const input = document.getElementById('editTraitsInput');
+            
+            traitsDiv.style.display = 'none';
+            traitsEditDiv.style.display = 'block';
+            
+            const profile = profiles[currentProfileUser];
+            input.value = profile.traits.join(', ');
+            input.focus();
+            
+            input.onblur = () => {
+                const newTraits = input.value.split(',').map(t => t.trim()).filter(t => t.length > 0);
+                profile.traits = newTraits.length > 0 ? newTraits : ['Целеустремлённость'];
+                saveProfiles(profiles);
+                showProfile(currentProfileUser);
+            };
+            
+            input.onkeydown = (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    input.blur();
+                }
+                if (e.key === 'Escape') {
+                    showProfile(currentProfileUser);
+                }
+            };
+        }
+
+        // ============ CHALLENGES SYSTEM ============
+        function renderChallenges() {
+            const list = document.getElementById('challengesList');
+            if (!list) return;
+            
+            if (challenges.length === 0) {
+                list.innerHTML = '<p style="color: #64748b; text-align: center; padding: 20px 0;">Создайте первый совместный челлендж!</p>';
+                return;
+            }
+            
+            const now = new Date();
+            
+            list.innerHTML = challenges.map(challenge => {
+                const startDate = new Date(challenge.startDate);
+                const endDate = new Date(startDate);
+                endDate.setDate(endDate.getDate() + challenge.duration);
+                
+                const isActive = now <= endDate;
+                const daysLeft = Math.ceil((endDate - now) / (1000 * 60 * 60 * 24));
+                
+                // Calculate progress for each user
+                const progressA = challenge.progressA || 0;
+                const progressB = challenge.progressB || 0;
+                const totalProgress = progressA + progressB;
+                const percentA = challenge.goal > 0 ? (progressA / challenge.goal) * 100 : 0;
+                const percentB = challenge.goal > 0 ? (progressB / challenge.goal) * 100 : 0;
+                const totalPercent = Math.min(((progressA + progressB) / challenge.goal) * 100, 100);
+                
+                return `
+                    <div class="challenge-item" data-challenge-id="${challenge.id}">
+                        <div class="challenge-name">
+                            🎯 ${challenge.name}
+                            ${!isActive ? '<span style="color: #64748b;">(завершён)</span>' : ''}
+                        </div>
+                        <div class="challenge-progress-container">
+                            <div class="challenge-progress-bar">
+                                <div class="challenge-progress-a" style="width: ${Math.min(percentA, 50)}%"></div>
+                                <div class="challenge-progress-b" style="width: ${Math.min(percentB, 50)}%"></div>
+                            </div>
+                            <div class="challenge-progress-text">
+                                <span>${profiles.A.name}: ${progressA} ${challenge.unit}</span>
+                                <span>${totalProgress}/${challenge.goal} ${challenge.unit} (${Math.round(totalPercent)}%)</span>
+                                <span>${profiles.B.name}: ${progressB} ${challenge.unit}</span>
+                            </div>
+                        </div>
+                        ${isActive ? `
+                            <div class="challenge-deadline">⏰ Осталось ${daysLeft} дней</div>
+                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                <button class="btn btn-secondary" style="flex: 1; padding: 8px;" onclick="addChallengeProgress('${challenge.id}', 'A')">+1 ${profiles.A.avatar}</button>
+                                <button class="btn btn-secondary" style="flex: 1; padding: 8px;" onclick="addChallengeProgress('${challenge.id}', 'B')">+1 ${profiles.B.avatar}</button>
+                                <button class="btn btn-secondary" style="padding: 8px; color: #f87171;" onclick="deleteChallenge('${challenge.id}')">🗑️</button>
+                            </div>
+                        ` : `
+                            <div style="text-align: center; margin-top: 10px;">
+                                ${totalProgress >= challenge.goal ? '🎉 Челлендж выполнен!' : '😔 Не завершено'}
+                                <button class="btn btn-secondary" style="margin-left: 10px; padding: 6px 12px; color: #f87171;" onclick="deleteChallenge('${challenge.id}')">Удалить</button>
+                            </div>
+                        `}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addChallengeProgress(challengeId, userId) {
+            const challenge = challenges.find(c => c.id === challengeId);
+            if (!challenge) return;
+            
+            const key = userId === 'A' ? 'progressA' : 'progressB';
+            challenge[key] = (challenge[key] || 0) + 1;
+            
+            saveChallenges(challenges);
+            renderChallenges();
+            
+            playSound('complete');
+        }
+
+        function createChallenge() {
+            const name = document.getElementById('challengeName').value.trim();
+            const goal = parseInt(document.getElementById('challengeGoal').value) || 0;
+            const unit = document.getElementById('challengeUnit').value.trim() || 'раз';
+            const duration = parseInt(document.getElementById('challengeDuration').value) || 30;
+            
+            if (!name || goal <= 0) {
+                alert('Заполните название и цель челленджа');
+                return;
+            }
+            
+            const challenge = {
+                id: generateId(),
+                name,
+                goal,
+                unit,
+                duration,
+                startDate: new Date().toISOString(),
+                progressA: 0,
+                progressB: 0
+            };
+            
+            challenges.push(challenge);
+            saveChallenges(challenges);
+            
+            // Reset form
+            document.getElementById('challengeName').value = '';
+            document.getElementById('challengeGoal').value = '';
+            document.getElementById('challengeUnit').value = '';
+            document.getElementById('challengeDuration').value = '';
+            document.getElementById('challengeForm').classList.remove('active');
+            
+            renderChallenges();
+        }
+
+        function deleteChallenge(challengeId) {
+            if (!confirm('Удалить этот челлендж?')) return;
+            
+            challenges = challenges.filter(c => c.id !== challengeId);
+            saveChallenges(challenges);
+            renderChallenges();
+        }
+
+        // Challenge form handlers
+        document.getElementById('addChallengeBtn')?.addEventListener('click', () => {
+            document.getElementById('challengeForm').classList.toggle('active');
+        });
+
+        document.getElementById('cancelChallenge')?.addEventListener('click', () => {
+            document.getElementById('challengeForm').classList.remove('active');
+        });
+
+        document.getElementById('saveChallenge')?.addEventListener('click', createChallenge);
+
+        // ============ TIME-BASED ACHIEVEMENTS ============
+        function checkTimeBasedAchievements(userId) {
+            const hour = new Date().getHours();
+            
+            if (hour < 7) {
+                // Early bird
+                if (!achievements[userId]?.early_bird) {
+                    achievements[userId] = achievements[userId] || {};
+                    achievements[userId].early_bird = {
+                        unlockedAt: new Date().toISOString(),
+                        seen: false
+                    };
+                    saveAchievements(achievements);
+                    showAchievementPopup(ACHIEVEMENTS.find(a => a.id === 'early_bird'));
+                }
+            }
+            
+            if (hour >= 23) {
+                // Night owl
+                if (!achievements[userId]?.night_owl) {
+                    achievements[userId] = achievements[userId] || {};
+                    achievements[userId].night_owl = {
+                        unlockedAt: new Date().toISOString(),
+                        seen: false
+                    };
+                    saveAchievements(achievements);
+                    showAchievementPopup(ACHIEVEMENTS.find(a => a.id === 'night_owl'));
+                }
+            }
+        }
 
         // ============ UTILS ============
         function formatDate(date) {
@@ -2822,6 +4003,11 @@
                 const ownerLabel = ownerNames[habit.owner] || habit.owner;
                 const categoryHtml = habit.category ? `<span class="category-badge">${habit.category}</span>` : '';
                 
+                // Streak badge
+                const habitStreak = getHabitStreak(habit.id);
+                const streakClass = getStreakFireClass(habitStreak);
+                const streakHtml = habitStreak >= 3 ? `<span class="habit-streak-indicator ${streakClass}">🔥${habitStreak}</span>` : '';
+                
                 const actionsHtml = `
                     <div class="habit-actions">
                         <button class="habit-action-btn" onclick="editHabit('${habit.id}')" title="Редактировать">✎</button>
@@ -2851,6 +4037,7 @@
                             <div class="habit-info" onclick="showHabitDetail('${habit.id}')" style="cursor: pointer;">
                                 <div class="habit-name">
                                     ${habit.name}
+                                    ${streakHtml}
                                     <span class="habit-owner ${ownerClass}">${ownerLabel}</span>
                                     ${categoryHtml}
                                     ${targetHtml}
@@ -2879,6 +4066,7 @@
                             <div class="habit-info" onclick="showHabitDetail('${habit.id}')" style="cursor: pointer;">
                                 <div class="habit-name">
                                     ${habit.name}
+                                    ${streakHtml}
                                     ${goalLabel ? `<span class="numeric-goal">${goalLabel}</span>` : ''}
                                     <span class="habit-owner ${ownerClass}">${ownerLabel}</span>
                                     ${categoryHtml}
@@ -3036,12 +4224,30 @@
             }
             
             const current = data.entries[dateStr][habitId];
-            data.entries[dateStr][habitId] = !current;
+            const newValue = !current;
+            data.entries[dateStr][habitId] = newValue;
             
             saveData(data);
             renderHabits();
             renderCalendar();
             updateProgressBars();
+            updateUserCards();
+            
+            // New features integration
+            if (newValue) {
+                playSound('complete');
+                
+                // Get habit owner and check achievements
+                const habit = data.habits.find(h => h.id === habitId);
+                if (habit) {
+                    const owners = habit.owner === 'shared' ? ['A', 'B'] : [habit.owner];
+                    owners.forEach(userId => {
+                        checkTimeBasedAchievements(userId);
+                        checkAchievements(userId);
+                        checkLevelUp(userId);
+                    });
+                }
+            }
         }
 
         function updateNumericHabit(habitId, value) {
@@ -3050,7 +4256,9 @@
                 data.entries[dateStr] = {};
             }
             
+            const prevValue = data.entries[dateStr][habitId] || 0;
             const numValue = parseInt(value) || 0;
+            
             if (numValue > 0) {
                 data.entries[dateStr][habitId] = numValue;
             } else {
@@ -3060,6 +4268,23 @@
             saveData(data);
             renderCalendar();
             renderHabits();
+            updateUserCards();
+            
+            // New features integration
+            if (numValue > prevValue) {
+                playSound('complete');
+                
+                // Get habit owner and check achievements
+                const habit = data.habits.find(h => h.id === habitId);
+                if (habit) {
+                    const owners = habit.owner === 'shared' ? ['A', 'B'] : [habit.owner];
+                    owners.forEach(userId => {
+                        checkTimeBasedAchievements(userId);
+                        checkAchievements(userId);
+                        checkLevelUp(userId);
+                    });
+                }
+            }
             updateProgressBars();
         }
 
@@ -4189,6 +5414,8 @@
                 const profile = profiles[userId];
                 const xp = calculateUserXP(userId);
                 const levelInfo = calculateLevel(xp);
+                const stats = calculateUserStats(userId);
+                const streakBadge = getStreakBadge(stats.streak);
                 
                 // Update profile data
                 profiles[userId].xp = xp;
@@ -4197,7 +5424,14 @@
                 // Update card UI
                 document.getElementById(`user${userId}Avatar`).textContent = profile.avatar;
                 document.getElementById(`user${userId}Name`).textContent = profile.name;
-                document.getElementById(`user${userId}Level`).textContent = `Ур. ${levelInfo.level}`;
+                
+                // Level with streak badge
+                let levelHtml = `Ур. ${levelInfo.level}`;
+                if (streakBadge) {
+                    levelHtml += ` <span class="streak-badge ${streakBadge.class}">${streakBadge.icon}${streakBadge.text}</span>`;
+                }
+                document.getElementById(`user${userId}Level`).innerHTML = levelHtml;
+                
                 document.getElementById(`user${userId}XpText`).textContent = 
                     `${levelInfo.xpInCurrentLevel} / ${levelInfo.xpForNextLevel} XP`;
             });
@@ -4294,65 +5528,27 @@
             document.getElementById('superpowerName').textContent = profile.superpowerName;
             document.getElementById('superpowerDesc').textContent = profile.superpowerDesc;
             
-            // Traits
+            // Traits (with edit hint)
             const traitsContainer = document.getElementById('profileTraits');
             traitsContainer.innerHTML = profile.traits.map(t => 
                 `<span class="profile-trait">${t}</span>`
-            ).join('');
+            ).join('') + '<div class="traits-edit-hint">Нажми чтобы редактировать</div>';
+            
+            // Reset traits edit mode
+            document.getElementById('profileTraitsEdit').style.display = 'none';
+            traitsContainer.style.display = 'flex';
             
             // Bio
             document.getElementById('profileBio').textContent = profile.bio;
             
-            // Reset to view mode
-            toggleProfileEdit(false);
+            // Render achievements
+            renderAchievements(userId);
             
             // Show modal
             document.getElementById('profileOverlay').classList.add('active');
         }
 
-        function toggleProfileEdit(editMode) {
-            const viewMode = document.getElementById('profileViewMode');
-            const editModeEl = document.getElementById('profileEditMode');
-            
-            if (editMode) {
-                const profile = profiles[currentProfileUser];
-                
-                // Fill form
-                document.getElementById('editName').value = profile.name;
-                document.getElementById('editTitle').value = profile.title;
-                document.getElementById('editSuperpowerIcon').value = profile.superpowerIcon;
-                document.getElementById('editSuperpowerName').value = profile.superpowerName;
-                document.getElementById('editSuperpowerDesc').value = profile.superpowerDesc;
-                document.getElementById('editTraits').value = profile.traits.join(', ');
-                document.getElementById('editBio').value = profile.bio;
-                
-                viewMode.style.display = 'none';
-                editModeEl.classList.add('active');
-            } else {
-                viewMode.style.display = 'block';
-                editModeEl.classList.remove('active');
-            }
-        }
-
-        function saveProfile() {
-            const profile = profiles[currentProfileUser];
-            
-            profile.name = document.getElementById('editName').value.trim() || profile.name;
-            profile.title = document.getElementById('editTitle').value.trim() || 'Начинающий герой';
-            profile.superpowerIcon = document.getElementById('editSuperpowerIcon').value.trim() || '🌟';
-            profile.superpowerName = document.getElementById('editSuperpowerName').value.trim() || 'Не задана';
-            profile.superpowerDesc = document.getElementById('editSuperpowerDesc').value.trim() || 'Добавь описание своей суперсилы!';
-            
-            const traitsStr = document.getElementById('editTraits').value;
-            profile.traits = traitsStr.split(',').map(t => t.trim()).filter(t => t.length > 0);
-            if (profile.traits.length === 0) profile.traits = ['Целеустремлённость'];
-            
-            profile.bio = document.getElementById('editBio').value.trim() || 'Расскажи о себе...';
-            
-            saveProfiles(profiles);
-            updateUserCards();
-            showProfile(currentProfileUser);
-        }
+        // Note: toggleProfileEdit and saveProfile replaced by inline editing functions
 
         function openEmojiPicker() {
             const grid = document.getElementById('emojiGrid');
@@ -4419,6 +5615,19 @@
             updateProgressBars();
             updateMotivation();
             updateSelectedDateText();
+            
+            // Initialize new features
+            renderChallenges();
+            updateSoundToggleUI();
+            
+            // Check achievements for both users on startup (silently, without popups)
+            // Just ensure data is ready
+            
+            // Store current levels to detect level-ups
+            previousLevels = { 
+                A: calculateLevel(calculateUserXP('A')).level, 
+                B: calculateLevel(calculateUserXP('B')).level 
+            };
         }
 
         init();
