@@ -51,40 +51,37 @@
             background-clip: text;
         }
 
-        .user-tabs {
+        .current-view-indicator {
             display: flex;
+            align-items: center;
             gap: 8px;
-        }
-
-        .user-tab {
             padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
             background: rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
+            border-radius: 20px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .user-tab:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(244, 114, 182, 0.3);
+        .view-label {
+            font-size: 0.8rem;
+            color: #64748b;
         }
 
-        .user-tab.active {
-            background: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
-            color: white;
-            border-color: transparent;
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        .view-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #f472b6;
         }
 
-        .user-tab[data-user="B"].active {
-            background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);
-            box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+        .view-name.user-b {
+            color: #c084fc;
+        }
+
+        .view-name.all {
+            background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         /* Global Progress Bar */
@@ -95,13 +92,44 @@
             margin-bottom: 24px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .global-progress:hover {
+            border-color: rgba(244, 114, 182, 0.3);
+        }
+
+        .global-progress.active {
+            border-color: rgba(244, 114, 182, 0.5);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.2);
+        }
+
+        .global-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
         }
 
         .global-progress h3 {
             font-size: 0.9rem;
             color: #94a3b8;
-            margin-bottom: 12px;
             font-weight: 500;
+        }
+
+        .global-progress-hint {
+            font-size: 0.75rem;
+            color: #64748b;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .global-progress:hover .global-progress-hint {
+            opacity: 1;
+        }
+
+        .global-progress.active .global-progress-hint {
+            opacity: 0;
         }
 
         .progress-bar {
@@ -842,6 +870,43 @@
 
         .user-progress-card[data-user="B"]:hover {
             border-color: rgba(168, 85, 247, 0.3);
+        }
+
+        .user-progress-card.active {
+            border-color: rgba(244, 114, 182, 0.5);
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+        }
+
+        .user-progress-card[data-user="B"].active {
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+
+        .user-profile-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(244, 114, 182, 0.2);
+            color: #f472b6;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .user-profile-btn:hover {
+            background: rgba(244, 114, 182, 0.4);
+            transform: scale(1.1);
+        }
+
+        .user-profile-btn.user-b {
+            background: rgba(168, 85, 247, 0.2);
+            color: #c084fc;
+        }
+
+        .user-profile-btn.user-b:hover {
+            background: rgba(168, 85, 247, 0.4);
         }
 
         .user-card-header {
@@ -2072,16 +2137,28 @@
         body.light-theme .user-card-info h3 {
             color: #1e293b;
         }
+
+        body.light-theme .current-view-indicator {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.light-theme .view-label {
+            color: #64748b;
+        }
+
+        body.light-theme .global-progress-hint {
+            color: #64748b;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Habit Tracker</h1>
-            <div class="user-tabs">
-                <button class="user-tab active" data-user="all">Все</button>
-                <button class="user-tab" data-user="A">Димочка 🦊</button>
-                <button class="user-tab" data-user="B">Дашенька 🦋</button>
+            <div class="current-view-indicator" id="currentViewIndicator">
+                <span class="view-label">Просмотр:</span>
+                <span class="view-name" id="currentViewName">Все привычки</span>
             </div>
             <div class="header-actions">
                 <button class="icon-btn" id="analyticsBtn" title="Аналитика">📊</button>
@@ -2100,8 +2177,11 @@
             <button class="pause-banner-end" id="endPauseBtn">Завершить</button>
         </div>
 
-        <div class="global-progress">
-            <h3>Общий прогресс</h3>
+        <div class="global-progress" id="globalProgressCard" onclick="switchUserView('all')" style="cursor: pointer;">
+            <div class="global-progress-header">
+                <h3>💕 Общий прогресс</h3>
+                <span class="global-progress-hint" id="globalProgressHint">Нажми для общего вида</span>
+            </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="globalProgressFill" style="width: 0%"></div>
             </div>
@@ -2205,7 +2285,7 @@
         </div>
 
         <div class="user-progress">
-            <div class="user-progress-card" data-user="A" onclick="showProfile('A')">
+            <div class="user-progress-card" data-user="A" id="userCardA" onclick="switchUserView('A')">
                 <div class="user-card-header">
                     <div class="user-avatar" id="userAAvatar">🦊</div>
                     <div class="user-card-info">
@@ -2215,13 +2295,14 @@
                         </h3>
                         <div class="user-xp-text" id="userAXpText">0 / 100 XP</div>
                     </div>
+                    <button class="user-profile-btn" onclick="event.stopPropagation(); showProfile('A')" title="Открыть профиль">👤</button>
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="userAProgress" style="width: 0%"></div>
                 </div>
                 <div class="progress-text" id="userAProgressText">0%</div>
             </div>
-            <div class="user-progress-card" data-user="B" onclick="showProfile('B')">
+            <div class="user-progress-card" data-user="B" id="userCardB" onclick="switchUserView('B')">
                 <div class="user-card-header">
                     <div class="user-avatar user-b" id="userBAvatar">🦋</div>
                     <div class="user-card-info">
@@ -2231,6 +2312,7 @@
                         </h3>
                         <div class="user-xp-text" id="userBXpText">0 / 100 XP</div>
                     </div>
+                    <button class="user-profile-btn user-b" onclick="event.stopPropagation(); showProfile('B')" title="Открыть профиль">👤</button>
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="userBProgress" style="width: 0%; background: linear-gradient(90deg, #a855f7 0%, #c084fc 100%);"></div>
@@ -3457,15 +3539,50 @@
             customPeriodGroup.style.display = 'none';
         }
 
-        // ============ USER FILTER ============
-        document.querySelectorAll('.user-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.user-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                userFilter = tab.dataset.user;
-                renderHabits();
-            });
-        });
+        // ============ USER VIEW SWITCHING ============
+        function switchUserView(userId) {
+            userFilter = userId;
+            
+            // Update UI states
+            document.getElementById('userCardA').classList.remove('active');
+            document.getElementById('userCardB').classList.remove('active');
+            document.getElementById('globalProgressCard').classList.remove('active');
+            
+            const viewName = document.getElementById('currentViewName');
+            viewName.classList.remove('user-b', 'all');
+            
+            if (userId === 'A') {
+                document.getElementById('userCardA').classList.add('active');
+                viewName.textContent = profiles.A.name + ' 🦊';
+                viewName.classList.remove('user-b', 'all');
+            } else if (userId === 'B') {
+                document.getElementById('userCardB').classList.add('active');
+                viewName.textContent = profiles.B.name + ' 🦋';
+                viewName.classList.add('user-b');
+            } else {
+                document.getElementById('globalProgressCard').classList.add('active');
+                viewName.textContent = 'Все привычки';
+                viewName.classList.add('all');
+            }
+            
+            renderHabits();
+            renderCategoryFilter();
+        }
+
+        function updateViewIndicator() {
+            const viewName = document.getElementById('currentViewName');
+            viewName.classList.remove('user-b', 'all');
+            
+            if (userFilter === 'A') {
+                viewName.textContent = profiles.A.name + ' 🦊';
+            } else if (userFilter === 'B') {
+                viewName.textContent = profiles.B.name + ' 🦋';
+                viewName.classList.add('user-b');
+            } else {
+                viewName.textContent = 'Все привычки';
+                viewName.classList.add('all');
+            }
+        }
 
         // ============ CALENDAR NAVIGATION ============
         document.getElementById('prevMonth').addEventListener('click', () => {
@@ -4289,6 +4406,11 @@
             applyTheme(settings.theme);
             updatePauseModeUI();
             updateUserCards();
+            
+            // Set initial view to "all" and mark it active
+            userFilter = 'all';
+            document.getElementById('globalProgressCard').classList.add('active');
+            updateViewIndicator();
             
             renderCalendar();
             renderHabits();
