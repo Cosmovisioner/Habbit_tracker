@@ -2418,6 +2418,52 @@
             margin-top: 4px;
         }
 
+        /* ============ COMPACT MODE ============ */
+        body.compact-mode .habit-progress,
+        body.compact-mode .habit-owner,
+        body.compact-mode .category-badge,
+        body.compact-mode .target-progress,
+        body.compact-mode .numeric-goal,
+        body.compact-mode .weekly-progress-badge,
+        body.compact-mode .habit-drag-handle {
+            display: none !important;
+        }
+
+        body.compact-mode .habit-item {
+            padding: 10px 14px;
+        }
+
+        body.compact-mode .habit-name {
+            font-size: 0.95rem;
+        }
+
+        body.compact-mode .habit-info {
+            flex: 1;
+        }
+
+        body.compact-mode .habits-list {
+            gap: 8px;
+        }
+
+        body.compact-mode .user-progress-card {
+            padding: 12px;
+        }
+
+        body.compact-mode .profile-stats,
+        body.compact-mode .global-progress .progress-bar,
+        body.compact-mode .calendar-section {
+            display: none;
+        }
+
+        body.compact-mode .global-progress {
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        body.compact-mode .global-progress h3 {
+            margin-bottom: 0;
+        }
+
         /* Light Theme */
         body.light-theme {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
@@ -2835,6 +2881,25 @@
         .habit-streak-indicator.fire-silver { color: #c0c0c0; }
         .habit-streak-indicator.fire-gold { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); }
         .habit-streak-indicator.fire-diamond { color: #00bfff; text-shadow: 0 0 8px rgba(0, 191, 255, 0.5); }
+
+        .weekly-progress-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            margin-left: 8px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+            border-radius: 10px;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        .weekly-progress-badge.complete {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
 
         /* ============ CONFETTI ANIMATION ============ */
         .confetti-container {
@@ -3697,6 +3762,20 @@
                                 <option value="numeric">Количество</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Частота</label>
+                            <select id="habitFrequency">
+                                <option value="daily">Каждый день</option>
+                                <option value="weekly">Раз в неделю</option>
+                                <option value="custom">Своя частота</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="frequencyTimesGroup" style="display: none;">
+                            <label>Раз в неделю</label>
+                            <input type="number" id="habitFrequencyTimes" placeholder="3" min="1" max="7" value="3">
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group" id="goalGroup" style="display: none;">
                             <label>Цель</label>
                             <input type="number" id="habitGoal" placeholder="10" min="1">
@@ -3885,6 +3964,13 @@
                     <label>Светлая тема</label>
                     <div class="toggle-switch" id="themeToggleSettings"></div>
                 </div>
+                <div class="settings-row">
+                    <label>Компактный режим</label>
+                    <div class="toggle-switch" id="compactModeToggle"></div>
+                </div>
+                <p style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">
+                    Скрывает прогресс-бары и лишние детали для быстрого чекина
+                </p>
             </div>
             
             <div class="settings-section">
@@ -5180,6 +5266,30 @@
         }
 
         // ============ HABITS ============
+        
+        // Get weekly completions count for flexible habits
+        function getWeeklyCompletions(habitId) {
+            const today = new Date();
+            const dayOfWeek = today.getDay();
+            const monday = new Date(today);
+            monday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+            monday.setHours(0, 0, 0, 0);
+            
+            let count = 0;
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(monday);
+                date.setDate(monday.getDate() + i);
+                if (date > today) break;
+                
+                const dateStr = formatDate(date);
+                const entry = data.entries[dateStr]?.[habitId];
+                if (entry === true || (typeof entry === 'number' && entry > 0)) {
+                    count++;
+                }
+            }
+            return count;
+        }
+        
         function renderHabits() {
             const list = document.getElementById('habitsList');
             const dateStr = formatDate(selectedDate);
@@ -5219,6 +5329,13 @@
                 const streakClass = getStreakFireClass(habitStreak);
                 const streakHtml = habitStreak >= 3 ? `<span class="habit-streak-indicator ${streakClass}">🔥${habitStreak}</span>` : '';
                 
+                // Weekly progress for flexible habits
+                const frequency = habit.frequency || 'daily';
+                const frequencyTimes = habit.frequencyTimes || 7;
+                const weeklyDone = getWeeklyCompletions(habit.id);
+                const isFlexible = frequency !== 'daily';
+                const weeklyHtml = isFlexible ? `<span class="weekly-progress-badge ${weeklyDone >= frequencyTimes ? 'complete' : ''}">${weeklyDone}/${frequencyTimes} на неделе</span>` : '';
+                
                 const actionsHtml = `
                     <div class="habit-actions">
                         <button class="habit-action-btn" onclick="editHabit('${habit.id}')" title="Редактировать">✎</button>
@@ -5249,6 +5366,7 @@
                                 <div class="habit-name">
                                     ${habit.name}
                                     ${streakHtml}
+                                    ${weeklyHtml}
                                     <span class="habit-owner ${ownerClass}">${ownerLabel}</span>
                                     ${categoryHtml}
                                     ${targetHtml}
@@ -5278,6 +5396,7 @@
                                 <div class="habit-name">
                                     ${habit.name}
                                     ${streakHtml}
+                                    ${weeklyHtml}
                                     ${goalLabel ? `<span class="numeric-goal">${goalLabel}</span>` : ''}
                                     <span class="habit-owner ${ownerClass}">${ownerLabel}</span>
                                     ${categoryHtml}
@@ -5850,6 +5969,14 @@
             }
         });
 
+        // Frequency selector
+        const habitFrequencySelect = document.getElementById('habitFrequency');
+        const frequencyTimesGroup = document.getElementById('frequencyTimesGroup');
+        
+        habitFrequencySelect.addEventListener('change', () => {
+            frequencyTimesGroup.style.display = habitFrequencySelect.value === 'custom' ? 'block' : 'none';
+        });
+
         goalTypeSelect.addEventListener('change', () => {
             customPeriodGroup.style.display = goalTypeSelect.value === 'custom' ? 'block' : 'none';
         });
@@ -5864,6 +5991,8 @@
             const customPeriod = parseInt(document.getElementById('habitCustomPeriod').value) || null;
             const target = parseInt(document.getElementById('habitTarget').value) || null;
             const category = document.getElementById('habitCategory').value.trim() || null;
+            const frequency = document.getElementById('habitFrequency').value;
+            const frequencyTimes = parseInt(document.getElementById('habitFrequencyTimes').value) || 3;
             
             if (!name) {
                 alert('Введите название привычки');
@@ -5884,7 +6013,9 @@
                         goalType: type === 'numeric' ? goalType : null,
                         customPeriod: type === 'numeric' && goalType === 'custom' ? customPeriod : null,
                         target,
-                        category
+                        category,
+                        frequency,
+                        frequencyTimes: frequency === 'custom' ? frequencyTimes : (frequency === 'weekly' ? 1 : 7)
                     };
                 }
             } else {
@@ -5899,7 +6030,9 @@
                     goalType: type === 'numeric' ? goalType : null,
                     customPeriod: type === 'numeric' && goalType === 'custom' ? customPeriod : null,
                     target,
-                    category
+                    category,
+                    frequency,
+                    frequencyTimes: frequency === 'custom' ? frequencyTimes : (frequency === 'weekly' ? 1 : 7)
                 };
                 data.habits.push(habit);
             }
@@ -5931,11 +6064,14 @@
             document.getElementById('habitCustomPeriod').value = habit.customPeriod || '';
             document.getElementById('habitTarget').value = habit.target || '';
             document.getElementById('habitCategory').value = habit.category || '';
+            document.getElementById('habitFrequency').value = habit.frequency || 'daily';
+            document.getElementById('habitFrequencyTimes').value = habit.frequencyTimes || 3;
             
             const isNumeric = habit.type === 'numeric';
             goalGroup.style.display = isNumeric ? 'block' : 'none';
             goalTypeGroup.style.display = isNumeric ? 'block' : 'none';
             customPeriodGroup.style.display = isNumeric && habit.goalType === 'custom' ? 'block' : 'none';
+            frequencyTimesGroup.style.display = habit.frequency === 'custom' ? 'block' : 'none';
             
             addHabitForm.classList.add('active');
             addHabitBtn.style.display = 'none';
@@ -5970,9 +6106,12 @@
             document.getElementById('habitCustomPeriod').value = '';
             document.getElementById('habitTarget').value = '';
             document.getElementById('habitCategory').value = '';
+            document.getElementById('habitFrequency').value = 'daily';
+            document.getElementById('habitFrequencyTimes').value = '3';
             goalGroup.style.display = 'none';
             goalTypeGroup.style.display = 'none';
             customPeriodGroup.style.display = 'none';
+            frequencyTimesGroup.style.display = 'none';
         }
 
         // ============ USER VIEW SWITCHING ============
@@ -6079,6 +6218,39 @@
 
         document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         document.getElementById('themeToggleSettings').addEventListener('click', toggleTheme);
+
+        // ============ COMPACT MODE ============
+        let compactMode = localStorage.getItem('habit_tracker_compact') === 'true';
+        
+        function applyCompactMode() {
+            if (compactMode) {
+                document.body.classList.add('compact-mode');
+            } else {
+                document.body.classList.remove('compact-mode');
+            }
+        }
+        
+        function toggleCompactMode() {
+            compactMode = !compactMode;
+            localStorage.setItem('habit_tracker_compact', compactMode);
+            applyCompactMode();
+            updateCompactModeUI();
+        }
+        
+        function updateCompactModeUI() {
+            const toggle = document.getElementById('compactModeToggle');
+            if (compactMode) {
+                toggle.classList.add('active');
+            } else {
+                toggle.classList.remove('active');
+            }
+        }
+        
+        document.getElementById('compactModeToggle')?.addEventListener('click', toggleCompactMode);
+        
+        // Initialize compact mode
+        applyCompactMode();
+        updateCompactModeUI();
 
         // ============ PAUSE MODE ============
         function updatePauseModeUI() {
