@@ -909,6 +909,45 @@
             background: rgba(168, 85, 247, 0.4);
         }
 
+        .my-habits-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px 12px;
+            border: 1px solid rgba(244, 114, 182, 0.3);
+            border-radius: 8px;
+            background: rgba(244, 114, 182, 0.1);
+            color: #f472b6;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .my-habits-btn:hover {
+            background: rgba(244, 114, 182, 0.2);
+            border-color: rgba(244, 114, 182, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .my-habits-btn svg {
+            stroke: currentColor;
+        }
+
+        .my-habits-btn.user-b {
+            border-color: rgba(168, 85, 247, 0.3);
+            background: rgba(168, 85, 247, 0.1);
+            color: #c084fc;
+        }
+
+        .my-habits-btn.user-b:hover {
+            background: rgba(168, 85, 247, 0.2);
+            border-color: rgba(168, 85, 247, 0.5);
+        }
+
         .user-card-header {
             display: flex;
             align-items: center;
@@ -1190,6 +1229,38 @@
         .profile-stat-label {
             font-size: 0.7rem;
             color: #64748b;
+        }
+
+        .profile-my-habits-btn {
+            width: 100%;
+            padding: 14px 20px;
+            margin-bottom: 24px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+        }
+
+        .profile-my-habits-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+        }
+
+        .profile-my-habits-btn:active {
+            transform: translateY(0);
+        }
+
+        .profile-my-habits-btn svg {
+            stroke: white;
         }
 
         .profile-section {
@@ -1729,16 +1800,6 @@
             border-color: rgba(244, 114, 182, 0.3);
         }
 
-        .view-cycle-icon {
-            margin-left: 6px;
-            color: #64748b;
-            transition: all 0.3s ease;
-        }
-
-        .current-view-indicator:hover .view-cycle-icon {
-            color: #f472b6;
-            transform: rotate(180deg);
-        }
 
         .current-view-indicator.flipping {
             animation: viewFlip 0.3s ease;
@@ -1750,9 +1811,6 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        .current-view-indicator.flipping .view-cycle-icon {
-            animation: iconSpin 0.3s ease;
-        }
 
         @keyframes iconSpin {
             0% { transform: rotate(0deg); }
@@ -3453,10 +3511,6 @@
             <div class="current-view-indicator clickable" id="currentViewIndicator" onclick="cycleView()">
                 <span class="view-label">Просмотр:</span>
                 <span class="view-name" id="currentViewName">Все привычки</span>
-                <svg class="view-cycle-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="23 4 23 10 17 10"></polyline>
-                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                </svg>
             </div>
             <div class="header-actions">
                 <button class="header-btn" id="analyticsBtn" title="Аналитика">
@@ -3828,6 +3882,15 @@
                         <div class="profile-stat-label">Активных дней</div>
                     </div>
                 </div>
+                
+                <!-- My Habits Button -->
+                <button class="profile-my-habits-btn" id="profileMyHabitsBtn" onclick="goToMyHabits()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                    </svg>
+                    <span>Мои привычки</span>
+                </button>
                 
                 <!-- Inline Editable Profile -->
                 <div id="profileViewMode">
@@ -4424,6 +4487,18 @@
             
             // Check profile achievement
             checkAchievements(currentProfileUser);
+        }
+
+        // ============ GO TO MY HABITS ============
+        function goToMyHabits() {
+            // Close profile modal
+            document.getElementById('profileOverlay').classList.remove('active');
+            
+            // Switch to this user's habits view
+            switchUserView(currentProfileUser);
+            
+            // Scroll to habits section
+            document.querySelector('.habits-list')?.scrollIntoView({ behavior: 'smooth' });
         }
 
         // ============ SUPERPOWER EDITING ============
@@ -5887,10 +5962,8 @@
         function applyTheme(theme) {
             if (theme === 'light') {
                 document.body.classList.add('light-theme');
-                document.getElementById('themeToggle').textContent = '☀️';
             } else {
                 document.body.classList.remove('light-theme');
-                document.getElementById('themeToggle').textContent = '🌙';
             }
             // Update meta theme-color
             document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#f8fafc' : '#0f0f1a';
