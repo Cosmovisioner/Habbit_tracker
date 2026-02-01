@@ -1207,29 +1207,223 @@
             gap: 8px;
         }
 
-        .profile-superpower {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%);
-            border: 1px solid rgba(244, 114, 182, 0.2);
+        .profile-superpower-single {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(168, 85, 247, 0.12) 100%);
+            border: 1px solid rgba(244, 114, 182, 0.25);
             border-radius: 12px;
-            padding: 16px;
+            padding: 14px 20px;
             text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
         }
 
-        .profile-superpower-icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
+        .profile-superpower-single:hover {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+            border-color: rgba(244, 114, 182, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(244, 114, 182, 0.2);
         }
 
-        .profile-superpower-name {
+        .superpower-text {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #f472b6;
+            background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-superpower-single::after {
+            content: '✎';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            transition: opacity 0.2s ease;
+        }
+
+        .profile-superpower-single:hover::after {
+            opacity: 1;
+        }
+
+        /* Traits Grid - 5 slots */
+        .profile-traits-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .trait-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 70px;
+            justify-content: center;
+        }
+
+        .trait-slot:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(244, 114, 182, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .trait-slot.filled {
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.1) 0%, rgba(192, 132, 252, 0.1) 100%);
+            border-color: rgba(244, 114, 182, 0.2);
+        }
+
+        .trait-slot-icon {
+            font-size: 1.3rem;
             margin-bottom: 4px;
         }
 
-        .profile-superpower-desc {
-            font-size: 0.8rem;
+        .trait-slot-text {
+            font-size: 0.65rem;
             color: #94a3b8;
+            text-align: center;
+            line-height: 1.2;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .trait-slot.filled .trait-slot-text {
+            color: #e2e8f0;
+        }
+
+        .trait-slot.empty {
+            border-style: dashed;
+        }
+
+        .trait-slot.empty .trait-slot-icon {
+            color: #475569;
+        }
+
+        /* Trait Picker Modal */
+        .trait-picker-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .trait-picker-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .trait-picker {
+            background: linear-gradient(135deg, rgba(15, 15, 26, 0.98) 0%, rgba(26, 26, 46, 0.98) 100%);
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 360px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .trait-picker-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+            color: #f472b6;
+        }
+
+        .trait-picker-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .trait-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .trait-option:hover {
+            background: rgba(244, 114, 182, 0.15);
+            border-color: rgba(244, 114, 182, 0.3);
+        }
+
+        .trait-option-icon {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .trait-option-text {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .trait-picker-custom {
+            display: flex;
+            gap: 8px;
+        }
+
+        .trait-picker-custom input {
+            flex: 1;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 0.9rem;
+        }
+
+        .trait-picker-custom input::placeholder {
+            color: #64748b;
+        }
+
+        .trait-picker-custom button {
+            padding: 10px 16px;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .trait-picker-custom button:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 480px) {
+            .profile-traits-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .profile-traits {
@@ -1457,6 +1651,181 @@
             background: rgba(244, 114, 182, 0.2);
             color: #f472b6;
             border-color: rgba(244, 114, 182, 0.3);
+        }
+
+        /* Apple-style Header Buttons */
+        .header-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #e2e8f0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-btn:active {
+            transform: translateY(0);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .header-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 1.5;
+        }
+
+        .header-btn .icon-sun {
+            display: none;
+        }
+
+        .header-btn .icon-moon {
+            display: block;
+        }
+
+        body.light-theme .header-btn .icon-sun {
+            display: block;
+        }
+
+        body.light-theme .header-btn .icon-moon {
+            display: none;
+        }
+
+        body.light-theme .header-btn {
+            background: rgba(0, 0, 0, 0.04);
+            color: #64748b;
+            border-color: rgba(0, 0, 0, 0.06);
+        }
+
+        body.light-theme .header-btn:hover {
+            background: rgba(0, 0, 0, 0.08);
+            color: #1e293b;
+        }
+
+        /* Clickable View Indicator with Dropdown */
+        .current-view-indicator.clickable {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .current-view-indicator.clickable:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(244, 114, 182, 0.3);
+        }
+
+        .view-cycle-icon {
+            margin-left: 6px;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+
+        .current-view-indicator:hover .view-cycle-icon {
+            color: #f472b6;
+            transform: rotate(180deg);
+        }
+
+        .current-view-indicator.flipping {
+            animation: viewFlip 0.3s ease;
+        }
+
+        @keyframes viewFlip {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .current-view-indicator.flipping .view-cycle-icon {
+            animation: iconSpin 0.3s ease;
+        }
+
+        @keyframes iconSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Clickable Avatar */
+        .user-avatar.clickable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .user-avatar.clickable:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.4);
+        }
+
+        .user-avatar.user-b.clickable:hover {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+
+        /* Clickable User Name */
+        .user-name-clickable {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .user-name-clickable:hover {
+            color: #f472b6;
+        }
+
+        .user-name-clickable::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #f472b6 0%, #c084fc 100%);
+            transition: width 0.2s ease;
+        }
+
+        .user-name-clickable:hover::after {
+            width: 100%;
+        }
+
+        /* Clickable Habits Title */
+        .habits-header h2 {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .habits-header h2:hover {
+            color: #f472b6;
+        }
+
+        .habits-header h2::after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/%3E%3Cpolyline points='15 3 21 3 21 9'/%3E%3Cline x1='10' y1='14' x2='21' y2='3'/%3E%3C/svg%3E");
+            background-size: contain;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .habits-header h2:hover::after {
+            opacity: 1;
         }
 
         /* Theme Toggle */
@@ -2023,13 +2392,15 @@
             color: #64748b;
         }
 
-        body.light-theme .icon-btn {
+        body.light-theme .icon-btn,
+        body.light-theme .header-btn {
             background: rgba(0, 0, 0, 0.05);
             color: #64748b;
             border-color: rgba(0, 0, 0, 0.1);
         }
 
-        body.light-theme .icon-btn:hover {
+        body.light-theme .icon-btn:hover,
+        body.light-theme .header-btn:hover {
             background: rgba(236, 72, 153, 0.1);
             color: #ec4899;
         }
@@ -2744,20 +3115,379 @@
             background: rgba(0, 0, 0, 0.03);
             border-color: rgba(0, 0, 0, 0.1);
         }
+
+        /* ============ FULL HABITS DASHBOARD ============ */
+        .dashboard-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .dashboard-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dashboard-modal {
+            background: linear-gradient(135deg, rgba(15, 15, 26, 0.98) 0%, rgba(26, 26, 46, 0.98) 100%);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 1200px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .dashboard-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dashboard-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .dashboard-month-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: #94a3b8;
+        }
+
+        .dashboard-nav-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .dashboard-nav-btn:hover {
+            background: rgba(244, 114, 182, 0.2);
+            color: #f472b6;
+        }
+
+        .dashboard-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #94a3b8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .dashboard-close:hover {
+            background: rgba(248, 113, 113, 0.2);
+            color: #f87171;
+        }
+
+        .dashboard-content {
+            flex: 1;
+            overflow: auto;
+            padding: 20px 24px;
+        }
+
+        .dashboard-table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .dashboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .dashboard-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .dashboard-table th {
+            padding: 12px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            font-weight: 500;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            white-space: nowrap;
+        }
+
+        .dashboard-table th:first-child {
+            text-align: left;
+            padding-left: 16px;
+            min-width: 200px;
+            position: sticky;
+            left: 0;
+            background: rgba(26, 26, 46, 0.98);
+            z-index: 11;
+        }
+
+        .dashboard-table td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            transition: background 0.2s ease;
+        }
+
+        .dashboard-table td:first-child {
+            text-align: left;
+            padding-left: 16px;
+            position: sticky;
+            left: 0;
+            background: rgba(26, 26, 46, 0.98);
+            z-index: 5;
+        }
+
+        .dashboard-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .dashboard-table tr:hover td:first-child {
+            background: rgba(26, 26, 46, 0.98);
+        }
+
+        .dashboard-habit-name {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-habit-name .habit-owner-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .dashboard-habit-name .habit-owner-dot.owner-A {
+            background: #f472b6;
+        }
+
+        .dashboard-habit-name .habit-owner-dot.owner-B {
+            background: #a855f7;
+        }
+
+        .dashboard-habit-name .habit-owner-dot.owner-shared {
+            background: linear-gradient(135deg, #f472b6 50%, #a855f7 50%);
+        }
+
+        .dashboard-cell {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .dashboard-cell.completed {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+        }
+
+        .dashboard-cell.partial {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: white;
+        }
+
+        .dashboard-cell.missed {
+            background: rgba(255, 255, 255, 0.05);
+            color: #475569;
+        }
+
+        .dashboard-cell.future {
+            background: transparent;
+            color: #334155;
+        }
+
+        .dashboard-cell.today {
+            box-shadow: 0 0 0 2px #f472b6;
+        }
+
+        .dashboard-cell:hover:not(.future) {
+            transform: scale(1.15);
+        }
+
+        .dashboard-legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            padding: 16px 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .dashboard-legend .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .dashboard-legend .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+        }
+
+        .dashboard-legend .legend-dot.completed {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+
+        .dashboard-legend .legend-dot.partial {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+        }
+
+        .dashboard-legend .legend-dot.missed {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Light theme dashboard */
+        body.light-theme .dashboard-modal {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        }
+
+        body.light-theme .dashboard-header {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        body.light-theme .dashboard-table th {
+            background: rgba(0, 0, 0, 0.03);
+            color: #64748b;
+        }
+
+        body.light-theme .dashboard-table th:first-child,
+        body.light-theme .dashboard-table td:first-child {
+            background: #f8fafc;
+        }
+
+        body.light-theme .dashboard-table td {
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-theme .dashboard-cell.missed {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Responsive dashboard */
+        @media (max-width: 768px) {
+            .dashboard-modal {
+                max-height: 95vh;
+                border-radius: 16px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .dashboard-content {
+                padding: 12px;
+            }
+
+            .dashboard-table th:first-child,
+            .dashboard-table td:first-child {
+                min-width: 140px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Habit Tracker</h1>
-            <div class="current-view-indicator" id="currentViewIndicator">
+            <div class="current-view-indicator clickable" id="currentViewIndicator" onclick="cycleView()">
                 <span class="view-label">Просмотр:</span>
                 <span class="view-name" id="currentViewName">Все привычки</span>
+                <svg class="view-cycle-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                </svg>
             </div>
             <div class="header-actions">
-                <button class="icon-btn" id="analyticsBtn" title="Аналитика">📊</button>
-                <button class="icon-btn" id="themeToggle" title="Сменить тему">🌙</button>
-                <button class="icon-btn" id="settingsBtn" title="Настройки">⚙️</button>
+                <button class="header-btn" id="analyticsBtn" title="Аналитика">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 20V10"></path>
+                        <path d="M12 20V4"></path>
+                        <path d="M6 20v-6"></path>
+                    </svg>
+                </button>
+                <button class="header-btn" id="themeToggle" title="Сменить тему">
+                    <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <button class="header-btn" id="settingsBtn" title="Настройки">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
             </div>
         </header>
 
@@ -2796,7 +3526,7 @@
 
             <div class="habits-section">
                 <div class="habits-header">
-                    <h2>Привычки</h2>
+                    <h2 onclick="openHabitsDashboard()" title="Открыть полный дашборд">Привычки</h2>
                     <span class="selected-date" id="selectedDateText">Сегодня</span>
                 </div>
                 
@@ -2912,15 +3642,14 @@
         <div class="user-progress">
             <div class="user-progress-card" data-user="A" id="userCardA" onclick="switchUserView('A')">
                 <div class="user-card-header">
-                    <div class="user-avatar" id="userAAvatar">🦊</div>
+                    <div class="user-avatar clickable" id="userAAvatar" onclick="event.stopPropagation(); showProfile('A')" title="Открыть профиль">🦊</div>
                     <div class="user-card-info">
                         <h3>
-                            <span id="userAName">Димочка</span>
+                            <span id="userAName" class="user-name-clickable" onclick="event.stopPropagation(); showProfile('A')" title="Открыть профиль">Димочка</span>
                             <span class="user-level" id="userALevel">Ур. 1</span>
                         </h3>
                         <div class="user-xp-text" id="userAXpText">0 / 100 XP</div>
                     </div>
-                    <button class="user-profile-btn" onclick="event.stopPropagation(); showProfile('A')" title="Открыть профиль">👤</button>
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="userAProgress" style="width: 0%"></div>
@@ -2929,15 +3658,14 @@
             </div>
             <div class="user-progress-card" data-user="B" id="userCardB" onclick="switchUserView('B')">
                 <div class="user-card-header">
-                    <div class="user-avatar user-b" id="userBAvatar">🦋</div>
+                    <div class="user-avatar user-b clickable" id="userBAvatar" onclick="event.stopPropagation(); showProfile('B')" title="Открыть профиль">🦋</div>
                     <div class="user-card-info">
                         <h3>
-                            <span id="userBName">Дашенька</span>
+                            <span id="userBName" class="user-name-clickable" onclick="event.stopPropagation(); showProfile('B')" title="Открыть профиль">Дашенька</span>
                             <span class="user-level user-b" id="userBLevel">Ур. 1</span>
                         </h3>
                         <div class="user-xp-text" id="userBXpText">0 / 100 XP</div>
                     </div>
-                    <button class="user-profile-btn user-b" onclick="event.stopPropagation(); showProfile('B')" title="Открыть профиль">👤</button>
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="userBProgress" style="width: 0%; background: linear-gradient(90deg, #a855f7 0%, #c084fc 100%);"></div>
@@ -3103,25 +3831,19 @@
                 
                 <!-- Inline Editable Profile -->
                 <div id="profileViewMode">
-                    <!-- Superpower -->
+                    <!-- Superpower (single line) -->
                     <div class="profile-section">
                         <div class="profile-section-title">⚡ Суперсила</div>
-                        <div class="profile-superpower" id="profileSuperpower">
-                            <div class="profile-superpower-icon inline-editable" id="superpowerIcon" onclick="startInlineEdit(this, 'superpowerIcon')" title="Нажми чтобы изменить">🌟</div>
-                            <div class="profile-superpower-name inline-editable" id="superpowerName" onclick="startInlineEdit(this, 'superpowerName')" title="Нажми чтобы изменить">Не задана</div>
-                            <div class="profile-superpower-desc inline-editable" id="superpowerDesc" onclick="startInlineEdit(this, 'superpowerDesc')" title="Нажми чтобы изменить">Добавь описание своей суперсилы!</div>
+                        <div class="profile-superpower-single" id="profileSuperpower" onclick="editSuperpower()" title="Нажми чтобы изменить">
+                            <span class="superpower-text" id="superpowerText">Несокрушимая воля</span>
                         </div>
                     </div>
                     
-                    <!-- Traits -->
+                    <!-- Traits (5 badges) -->
                     <div class="profile-section">
                         <div class="profile-section-title">🏷️ Черты характера</div>
-                        <div class="profile-traits editable" id="profileTraits" onclick="startTraitsEdit()" title="Нажми чтобы изменить">
-                            <span class="profile-trait">Целеустремлённость</span>
-                            <div class="traits-edit-hint">Нажми чтобы редактировать</div>
-                        </div>
-                        <div class="profile-traits-edit" id="profileTraitsEdit" style="display: none;">
-                            <input type="text" id="editTraitsInput" class="inline-edit-input" placeholder="Через запятую: Упорство, Позитив...">
+                        <div class="profile-traits-grid" id="profileTraits">
+                            <!-- 5 trait slots will be rendered here -->
                         </div>
                     </div>
                     
@@ -3150,6 +3872,48 @@
         <div class="emoji-picker">
             <div class="emoji-picker-title">Выбери аватар</div>
             <div class="emoji-grid" id="emojiGrid"></div>
+        </div>
+    </div>
+
+    <!-- Trait Picker -->
+    <div class="trait-picker-overlay" id="traitPickerOverlay">
+        <div class="trait-picker">
+            <div class="trait-picker-title">Выбери черту характера</div>
+            <div class="trait-picker-options" id="traitPickerOptions"></div>
+            <div class="trait-picker-custom">
+                <input type="text" id="customTraitInput" placeholder="Или напиши свою...">
+                <button onclick="saveCustomTrait()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Habits Dashboard Modal -->
+    <div class="dashboard-overlay" id="dashboardOverlay">
+        <div class="dashboard-modal">
+            <div class="dashboard-header">
+                <div class="dashboard-title">📋 Все привычки</div>
+                <div class="dashboard-header-actions">
+                    <div class="dashboard-month-nav">
+                        <button class="dashboard-nav-btn" id="dashboardPrevMonth">←</button>
+                        <span id="dashboardMonthTitle">Январь 2026</span>
+                        <button class="dashboard-nav-btn" id="dashboardNextMonth">→</button>
+                    </div>
+                    <button class="dashboard-close" id="dashboardClose">×</button>
+                </div>
+            </div>
+            <div class="dashboard-content">
+                <div class="dashboard-table-wrapper">
+                    <table class="dashboard-table" id="dashboardTable">
+                        <thead id="dashboardTableHead"></thead>
+                        <tbody id="dashboardTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dashboard-legend">
+                <div class="legend-item"><div class="legend-dot completed"></div> Выполнено</div>
+                <div class="legend-item"><div class="legend-dot partial"></div> Частично</div>
+                <div class="legend-item"><div class="legend-dot missed"></div> Пропущено</div>
+            </div>
         </div>
     </div>
 
@@ -3198,10 +3962,12 @@
                 name: 'Димочка',
                 avatar: '🦊',
                 title: 'Начинающий герой',
-                superpowerIcon: '🌟',
-                superpowerName: 'Не задана',
-                superpowerDesc: 'Нажми "Редактировать" чтобы добавить свою суперсилу!',
-                traits: ['Целеустремлённость'],
+                superpower: 'Несокрушимая воля',
+                traits: [
+                    { icon: '💪', text: 'Сила воли' },
+                    { icon: '🎯', text: 'Фокус' },
+                    null, null, null
+                ],
                 bio: 'Расскажи о себе...',
                 xp: 0,
                 level: 1
@@ -3210,15 +3976,39 @@
                 name: 'Дашенька',
                 avatar: '🦋',
                 title: 'Начинающий герой',
-                superpowerIcon: '✨',
-                superpowerName: 'Не задана',
-                superpowerDesc: 'Нажми "Редактировать" чтобы добавить свою суперсилу!',
-                traits: ['Целеустремлённость'],
+                superpower: 'Бесконечная энергия',
+                traits: [
+                    { icon: '✨', text: 'Позитив' },
+                    { icon: '💕', text: 'Забота' },
+                    null, null, null
+                ],
                 bio: 'Расскажи о себе...',
                 xp: 0,
                 level: 1
             }
         };
+
+        // Predefined trait options
+        const TRAIT_OPTIONS = [
+            { icon: '💪', text: 'Сила воли' },
+            { icon: '🎯', text: 'Фокус' },
+            { icon: '✨', text: 'Позитив' },
+            { icon: '💕', text: 'Забота' },
+            { icon: '🔥', text: 'Страсть' },
+            { icon: '🧘', text: 'Спокойствие' },
+            { icon: '🎨', text: 'Креативность' },
+            { icon: '📚', text: 'Любознательность' },
+            { icon: '🤝', text: 'Дружелюбие' },
+            { icon: '⚡', text: 'Энергичность' },
+            { icon: '🛡️', text: 'Надёжность' },
+            { icon: '🌟', text: 'Оптимизм' },
+            { icon: '🎭', text: 'Юмор' },
+            { icon: '💎', text: 'Честность' },
+            { icon: '🌈', text: 'Гибкость' },
+            { icon: '🏃', text: 'Активность' },
+            { icon: '🧠', text: 'Ум' },
+            { icon: '❤️', text: 'Доброта' },
+        ];
 
         function loadData() {
             const stored = localStorage.getItem(STORAGE_KEY);
@@ -3342,7 +4132,7 @@
             { id: 'shared_habit', icon: '💕', name: 'Командная работа', desc: 'Создай общую привычку', check: (userId) => data.habits.some(h => h.owner === 'shared') },
             { id: 'profile_complete', icon: '🎭', name: 'Индивидуальность', desc: 'Заполни профиль полностью', check: (userId) => {
                 const p = profiles[userId];
-                return p.name !== 'Димочка' && p.name !== 'Дашенька' || p.superpowerName !== 'Не задана' && p.bio !== 'Расскажи о себе...';
+                return (p.name !== 'Димочка' && p.name !== 'Дашенька') || (p.superpower && p.superpower !== 'Нажми чтобы добавить' && p.bio !== 'Расскажи о себе...');
             }},
             { id: 'early_bird', icon: '🌅', name: 'Ранняя пташка', desc: 'Выполни привычку до 7:00', check: () => false }, // Special - tracked separately
             { id: 'night_owl', icon: '🦉', name: 'Полуночник', desc: 'Выполни привычку после 23:00', check: () => false }, // Special - tracked separately
@@ -3623,15 +4413,6 @@
                 case 'title':
                     profile.title = newValue || 'Начинающий герой';
                     break;
-                case 'superpowerIcon':
-                    profile.superpowerIcon = newValue || '🌟';
-                    break;
-                case 'superpowerName':
-                    profile.superpowerName = newValue || 'Не задана';
-                    break;
-                case 'superpowerDesc':
-                    profile.superpowerDesc = newValue || 'Добавь описание!';
-                    break;
                 case 'bio':
                     profile.bio = newValue || 'Расскажи о себе...';
                     break;
@@ -3645,35 +4426,121 @@
             checkAchievements(currentProfileUser);
         }
 
-        function startTraitsEdit() {
-            const traitsDiv = document.getElementById('profileTraits');
-            const traitsEditDiv = document.getElementById('profileTraitsEdit');
-            const input = document.getElementById('editTraitsInput');
-            
-            traitsDiv.style.display = 'none';
-            traitsEditDiv.style.display = 'block';
-            
+        // ============ SUPERPOWER EDITING ============
+        function editSuperpower() {
             const profile = profiles[currentProfileUser];
-            input.value = profile.traits.join(', ');
-            input.focus();
+            const currentValue = profile.superpower || 'Моя суперсила';
+            const newValue = prompt('Твоя суперсила:', currentValue);
             
-            input.onblur = () => {
-                const newTraits = input.value.split(',').map(t => t.trim()).filter(t => t.length > 0);
-                profile.traits = newTraits.length > 0 ? newTraits : ['Целеустремлённость'];
+            if (newValue !== null && newValue.trim()) {
+                profile.superpower = newValue.trim();
                 saveProfiles(profiles);
                 showProfile(currentProfileUser);
-            };
-            
-            input.onkeydown = (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    input.blur();
-                }
-                if (e.key === 'Escape') {
-                    showProfile(currentProfileUser);
-                }
-            };
+                checkAchievements(currentProfileUser);
+            }
         }
+
+        // ============ TRAITS EDITING ============
+        let currentTraitSlot = 0;
+
+        function openTraitPicker(slotIndex) {
+            currentTraitSlot = slotIndex;
+            
+            const optionsContainer = document.getElementById('traitPickerOptions');
+            optionsContainer.innerHTML = TRAIT_OPTIONS.map(trait => `
+                <div class="trait-option" onclick="selectTrait('${trait.icon}', '${trait.text}')">
+                    <div class="trait-option-icon">${trait.icon}</div>
+                    <div class="trait-option-text">${trait.text}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('customTraitInput').value = '';
+            document.getElementById('traitPickerOverlay').classList.add('active');
+        }
+
+        function selectTrait(icon, text) {
+            const profile = profiles[currentProfileUser];
+            
+            // Ensure traits is an array of 5 elements
+            if (!Array.isArray(profile.traits) || profile.traits.length !== 5) {
+                profile.traits = [null, null, null, null, null];
+            }
+            
+            profile.traits[currentTraitSlot] = { icon, text };
+            saveProfiles(profiles);
+            
+            document.getElementById('traitPickerOverlay').classList.remove('active');
+            showProfile(currentProfileUser);
+            checkAchievements(currentProfileUser);
+        }
+
+        function saveCustomTrait() {
+            const input = document.getElementById('customTraitInput');
+            const text = input.value.trim();
+            
+            if (text) {
+                selectTrait('✨', text);
+            }
+        }
+
+        function removeTrait(slotIndex) {
+            const profile = profiles[currentProfileUser];
+            if (Array.isArray(profile.traits) && profile.traits[slotIndex]) {
+                profile.traits[slotIndex] = null;
+                saveProfiles(profiles);
+                showProfile(currentProfileUser);
+            }
+        }
+
+        function renderTraits(userId) {
+            const container = document.getElementById('profileTraits');
+            if (!container) return;
+            
+            const profile = profiles[userId];
+            
+            // Ensure traits is an array of 5 elements
+            let traits = profile.traits;
+            if (!Array.isArray(traits)) {
+                traits = [null, null, null, null, null];
+            }
+            while (traits.length < 5) traits.push(null);
+            if (traits.length > 5) traits = traits.slice(0, 5);
+            
+            // Convert old format to new format if needed
+            traits = traits.map(t => {
+                if (t && typeof t === 'string') {
+                    return { icon: '✨', text: t };
+                }
+                return t;
+            });
+            
+            profile.traits = traits;
+            
+            container.innerHTML = traits.map((trait, index) => {
+                if (trait) {
+                    return `
+                        <div class="trait-slot filled" onclick="openTraitPicker(${index})" title="Нажми чтобы изменить">
+                            <div class="trait-slot-icon">${trait.icon}</div>
+                            <div class="trait-slot-text">${trait.text}</div>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div class="trait-slot empty" onclick="openTraitPicker(${index})" title="Добавить черту">
+                            <div class="trait-slot-icon">+</div>
+                            <div class="trait-slot-text">Добавить</div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        // Close trait picker on overlay click
+        document.getElementById('traitPickerOverlay')?.addEventListener('click', (e) => {
+            if (e.target.id === 'traitPickerOverlay') {
+                document.getElementById('traitPickerOverlay').classList.remove('active');
+            }
+        });
 
         // ============ CHALLENGES SYSTEM ============
         function renderChallenges() {
@@ -3835,6 +4702,183 @@
                 }
             }
         }
+
+        // ============ VIEW DROPDOWN ============
+        // ============ VIEW CYCLING ============
+        function cycleView() {
+            // Cycle through: all → A → B → all
+            const views = ['all', 'A', 'B'];
+            const currentIndex = views.indexOf(userFilter);
+            const nextIndex = (currentIndex + 1) % views.length;
+            const nextView = views[nextIndex];
+            
+            switchUserView(nextView);
+            
+            // Add flip animation
+            const indicator = document.getElementById('currentViewIndicator');
+            indicator.classList.add('flipping');
+            setTimeout(() => indicator.classList.remove('flipping'), 300);
+        }
+
+        // ============ HABITS DASHBOARD ============
+        let dashboardMonth = new Date();
+
+        function openHabitsDashboard() {
+            dashboardMonth = new Date();
+            renderDashboard();
+            document.getElementById('dashboardOverlay').classList.add('active');
+        }
+
+        function closeDashboard() {
+            document.getElementById('dashboardOverlay').classList.remove('active');
+        }
+
+        function renderDashboard() {
+            const thead = document.getElementById('dashboardTableHead');
+            const tbody = document.getElementById('dashboardTableBody');
+            const monthTitle = document.getElementById('dashboardMonthTitle');
+            
+            const year = dashboardMonth.getFullYear();
+            const month = dashboardMonth.getMonth();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            
+            monthTitle.textContent = `${monthNames[month]} ${year}`;
+            
+            // Build header row with days
+            let headerHtml = '<tr><th>Привычка</th>';
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const isToday = date.toDateString() === today.toDateString();
+                const dayOfWeek = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'][date.getDay()];
+                headerHtml += `<th class="${isToday ? 'today-header' : ''}">${day}<br><small>${dayOfWeek}</small></th>`;
+            }
+            headerHtml += '</tr>';
+            thead.innerHTML = headerHtml;
+            
+            // Build body rows with habits
+            let bodyHtml = '';
+            
+            // Filter habits based on current user view
+            let habitsToShow = data.habits;
+            if (userFilter !== 'all') {
+                habitsToShow = habitsToShow.filter(h => h.owner === userFilter || h.owner === 'shared');
+            }
+            
+            habitsToShow.forEach(habit => {
+                bodyHtml += `<tr>`;
+                bodyHtml += `<td>
+                    <div class="dashboard-habit-name">
+                        <div class="habit-owner-dot owner-${habit.owner}"></div>
+                        <span>${habit.name}</span>
+                    </div>
+                </td>`;
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const dateStr = formatDate(date);
+                    const isToday = date.toDateString() === today.toDateString();
+                    const isFuture = date > today;
+                    
+                    const entry = data.entries[dateStr]?.[habit.id];
+                    let cellClass = 'dashboard-cell';
+                    let cellContent = '';
+                    
+                    if (isFuture) {
+                        cellClass += ' future';
+                    } else if (habit.type === 'binary') {
+                        if (entry === true) {
+                            cellClass += ' completed';
+                            cellContent = '✓';
+                        } else {
+                            cellClass += ' missed';
+                        }
+                    } else {
+                        // Numeric
+                        if (typeof entry === 'number' && entry > 0) {
+                            const goal = habit.goal || 1;
+                            if (entry >= goal) {
+                                cellClass += ' completed';
+                            } else {
+                                cellClass += ' partial';
+                            }
+                            cellContent = entry;
+                        } else {
+                            cellClass += ' missed';
+                        }
+                    }
+                    
+                    if (isToday) cellClass += ' today';
+                    
+                    bodyHtml += `<td><div class="${cellClass}" onclick="toggleDashboardCell('${habit.id}', '${dateStr}', '${habit.type}')">${cellContent}</div></td>`;
+                }
+                
+                bodyHtml += '</tr>';
+            });
+            
+            if (habitsToShow.length === 0) {
+                bodyHtml = `<tr><td colspan="${daysInMonth + 1}" style="text-align: center; padding: 40px; color: #64748b;">Нет привычек для отображения</td></tr>`;
+            }
+            
+            tbody.innerHTML = bodyHtml;
+        }
+
+        function toggleDashboardCell(habitId, dateStr, type) {
+            if (!data.entries[dateStr]) {
+                data.entries[dateStr] = {};
+            }
+            
+            const habit = data.habits.find(h => h.id === habitId);
+            if (!habit) return;
+            
+            if (type === 'binary') {
+                const current = data.entries[dateStr][habitId];
+                data.entries[dateStr][habitId] = !current;
+                
+                if (!current) {
+                    playSound('complete');
+                    const owners = habit.owner === 'shared' ? ['A', 'B'] : [habit.owner];
+                    owners.forEach(userId => {
+                        checkAchievements(userId);
+                        checkLevelUp(userId);
+                    });
+                }
+            } else {
+                // For numeric, increment by 1
+                const current = data.entries[dateStr][habitId] || 0;
+                data.entries[dateStr][habitId] = current + 1;
+                playSound('complete');
+                
+                const owners = habit.owner === 'shared' ? ['A', 'B'] : [habit.owner];
+                owners.forEach(userId => {
+                    checkAchievements(userId);
+                    checkLevelUp(userId);
+                });
+            }
+            
+            saveData(data);
+            renderDashboard();
+            renderHabits();
+            renderCalendar();
+            updateProgressBars();
+            updateUserCards();
+        }
+
+        // Dashboard event listeners
+        document.getElementById('dashboardClose')?.addEventListener('click', closeDashboard);
+        document.getElementById('dashboardOverlay')?.addEventListener('click', (e) => {
+            if (e.target.id === 'dashboardOverlay') closeDashboard();
+        });
+
+        document.getElementById('dashboardPrevMonth')?.addEventListener('click', () => {
+            dashboardMonth.setMonth(dashboardMonth.getMonth() - 1);
+            renderDashboard();
+        });
+
+        document.getElementById('dashboardNextMonth')?.addEventListener('click', () => {
+            dashboardMonth.setMonth(dashboardMonth.getMonth() + 1);
+            renderDashboard();
+        });
 
         // ============ UTILS ============
         function formatDate(date) {
@@ -5523,20 +6567,14 @@
             document.getElementById('profileCompleted').textContent = stats.completions;
             document.getElementById('profileDays').textContent = stats.activeDays;
             
-            // Superpower
-            document.getElementById('superpowerIcon').textContent = profile.superpowerIcon;
-            document.getElementById('superpowerName').textContent = profile.superpowerName;
-            document.getElementById('superpowerDesc').textContent = profile.superpowerDesc;
+            // Superpower (single line)
+            const superpowerText = document.getElementById('superpowerText');
+            if (superpowerText) {
+                superpowerText.textContent = profile.superpower || 'Нажми чтобы добавить';
+            }
             
-            // Traits (with edit hint)
-            const traitsContainer = document.getElementById('profileTraits');
-            traitsContainer.innerHTML = profile.traits.map(t => 
-                `<span class="profile-trait">${t}</span>`
-            ).join('') + '<div class="traits-edit-hint">Нажми чтобы редактировать</div>';
-            
-            // Reset traits edit mode
-            document.getElementById('profileTraitsEdit').style.display = 'none';
-            traitsContainer.style.display = 'flex';
+            // Traits (5 slots grid)
+            renderTraits(userId);
             
             // Bio
             document.getElementById('profileBio').textContent = profile.bio;
