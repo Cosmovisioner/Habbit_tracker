@@ -252,6 +252,152 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: #f1f5f9;
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-header h2:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #f472b6;
+        }
+
+        /* Month Picker Modal */
+        .month-picker-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .month-picker-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .month-picker-modal {
+            background: rgba(20, 20, 35, 0.9);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 24px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .month-picker-overlay.active .month-picker-modal {
+            transform: scale(1);
+        }
+
+        .month-picker-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .month-picker-year {
+            font-size: 1.4rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #f472b6 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .month-picker-nav {
+            display: flex;
+            gap: 8px;
+        }
+
+        .month-picker-nav button {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .month-picker-nav button:hover {
+            background: rgba(244, 114, 182, 0.3);
+            color: #f472b6;
+        }
+
+        .month-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .month-picker-item {
+            padding: 14px 8px;
+            text-align: center;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .month-picker-item:hover {
+            background: rgba(244, 114, 182, 0.2);
+            border-color: rgba(244, 114, 182, 0.4);
+            transform: scale(1.05);
+        }
+
+        .month-picker-item.current {
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.3) 0%, rgba(192, 132, 252, 0.3) 100%);
+            border-color: rgba(244, 114, 182, 0.5);
+            color: #f472b6;
+            font-weight: 600;
+        }
+
+        .month-picker-item.selected {
+            background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+            border-color: transparent;
+            color: white;
+            font-weight: 600;
+        }
+
+        body.light-theme .month-picker-modal {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        body.light-theme .month-picker-item {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #1e293b;
+        }
+
+        body.light-theme .month-picker-item:hover {
+            background: rgba(244, 114, 182, 0.15);
+        }
+
+        body.light-theme .month-picker-nav button {
+            background: rgba(0, 0, 0, 0.08);
+            color: #475569;
         }
 
         .calendar-nav {
@@ -2464,6 +2610,14 @@
             margin-bottom: 0;
         }
 
+        body.compact-mode .main-content {
+            grid-template-columns: 1fr;
+        }
+
+        body.compact-mode .habits-section {
+            max-width: 100%;
+        }
+
         /* Light Theme */
         body.light-theme {
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
@@ -4164,6 +4318,20 @@
             <div class="level-up-icon">🎉</div>
             <div class="level-up-text">Новый уровень!</div>
             <div class="level-up-level" id="levelUpLevel">2</div>
+        </div>
+    </div>
+
+    <!-- Month Picker Modal -->
+    <div class="month-picker-overlay" id="monthPickerOverlay">
+        <div class="month-picker-modal">
+            <div class="month-picker-header">
+                <span class="month-picker-year" id="monthPickerYear">2026</span>
+                <div class="month-picker-nav">
+                    <button id="monthPickerPrevYear">←</button>
+                    <button id="monthPickerNextYear">→</button>
+                </div>
+            </div>
+            <div class="month-picker-grid" id="monthPickerGrid"></div>
         </div>
     </div>
 
@@ -6168,6 +6336,64 @@
         document.getElementById('nextMonth').addEventListener('click', () => {
             currentMonth.setMonth(currentMonth.getMonth() + 1);
             renderCalendar();
+        });
+
+        // ============ MONTH PICKER ============
+        let monthPickerYear = new Date().getFullYear();
+
+        function openMonthPicker() {
+            monthPickerYear = currentMonth.getFullYear();
+            renderMonthPicker();
+            document.getElementById('monthPickerOverlay').classList.add('active');
+        }
+
+        function closeMonthPicker() {
+            document.getElementById('monthPickerOverlay').classList.remove('active');
+        }
+
+        function renderMonthPicker() {
+            document.getElementById('monthPickerYear').textContent = monthPickerYear;
+            
+            const grid = document.getElementById('monthPickerGrid');
+            const currentDate = new Date();
+            const selectedMonth = currentMonth.getMonth();
+            const selectedYear = currentMonth.getFullYear();
+            
+            grid.innerHTML = monthNames.map((name, index) => {
+                const isCurrent = index === currentDate.getMonth() && monthPickerYear === currentDate.getFullYear();
+                const isSelected = index === selectedMonth && monthPickerYear === selectedYear;
+                
+                let className = 'month-picker-item';
+                if (isSelected) className += ' selected';
+                else if (isCurrent) className += ' current';
+                
+                return `<div class="${className}" onclick="selectMonth(${index})">${name}</div>`;
+            }).join('');
+        }
+
+        function selectMonth(monthIndex) {
+            currentMonth = new Date(monthPickerYear, monthIndex, 1);
+            renderCalendar();
+            closeMonthPicker();
+        }
+
+        // Month picker event listeners
+        document.getElementById('calendarTitle').addEventListener('click', openMonthPicker);
+
+        document.getElementById('monthPickerOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'monthPickerOverlay') {
+                closeMonthPicker();
+            }
+        });
+
+        document.getElementById('monthPickerPrevYear').addEventListener('click', () => {
+            monthPickerYear--;
+            renderMonthPicker();
+        });
+
+        document.getElementById('monthPickerNextYear').addEventListener('click', () => {
+            monthPickerYear++;
+            renderMonthPicker();
         });
 
         // ============ MOTIVATIONAL QUOTES ============
